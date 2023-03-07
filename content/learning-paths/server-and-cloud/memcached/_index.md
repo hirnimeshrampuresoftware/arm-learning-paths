@@ -5,7 +5,7 @@ description: Learn how to install memcached on Arm servers
 
 minutes_to_complete: 40
 
-who_is_this_for: This is an introductory topic for software developers who want to use memcached as their in-memory key-value store for mobile, web, gaming or e-Commerce applications.
+who_is_this_for: This is an introductory topic for software developers who want to use memcached as their in-memory key-value store.
 
 learning_objectives:
     - Install and run memcached on your Arm-based cloud server
