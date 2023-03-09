@@ -1,6 +1,6 @@
 ---
 layout: learningpathall
-title: Run Memcached on Arm servers
+title: Run & Test Memcached on Arm servers
 weight: 2
 ---
 
