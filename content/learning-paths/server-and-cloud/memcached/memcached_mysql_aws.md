@@ -15,7 +15,7 @@ Any computer which has the required tools installed can be used for this section
 You will need [an AWS account](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start). Create an account if needed.
 
 Following tools are required on the computer you are using. Follow the links to install the required tools.
-* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+* [AWS CLI](/install-tools/aws-cli)
 * [Ansible](https://www.cyberciti.biz/faq/how-to-install-and-configure-latest-version-of-ansible-on-ubuntu-linux/)
 * [Terraform](/install-tools/terraform)
 * [Python](https://beebom.com/how-install-python-ubuntu-linux/)
