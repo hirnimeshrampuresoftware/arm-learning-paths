@@ -1,6 +1,6 @@
 ---
 # User change
-title: "Deploy Memcached as a cache for MySQL on Google Cloud Arm based Instance"
+title: "Deploy Memcached as a cache for MySQL on a Google Cloud Arm based Instance"
 
 weight: 5 # 1 is first, 2 is second, etc.
 
