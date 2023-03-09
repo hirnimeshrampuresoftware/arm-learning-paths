@@ -15,7 +15,7 @@ Any computer which has the required tools installed can be used for this section
 You will need a [Google Cloud account](https://console.cloud.google.com/). Create an account if needed.
 
 Following tools are required on the computer you are using. Follow the links to install the required tools.
-* [Google Cloud CLI](https://cloud.google.com/sdk/docs/install-sdk#deb)
+* [Google Cloud CLI](/install-tools/gcloud)
 * [Ansible](https://www.cyberciti.biz/faq/how-to-install-and-configure-latest-version-of-ansible-on-ubuntu-linux/)
 * [Terraform](/install-tools/terraform)
 * [Python](https://beebom.com/how-install-python-ubuntu-linux/)
