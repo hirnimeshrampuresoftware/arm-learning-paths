@@ -1,6 +1,6 @@
 ---
 layout: learningpathall
-title: Run & Test Memcached on Arm servers
+title: Run Memcached on Arm servers
 weight: 2
 ---
 
@@ -93,3 +93,4 @@ Gets       187514.94    187514.94         0.00         1.33374         1.12700  
 Waits           0.00          ---          ---             ---             ---             ---             ---          ---
 Totals     375029.89    187514.94         0.00         1.33595         1.12700         2.84700         7.42300     61711.46
 ```
+
