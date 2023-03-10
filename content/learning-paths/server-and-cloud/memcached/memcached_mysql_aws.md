@@ -2,7 +2,7 @@
 # User change
 title: "Deploy Memcached as a cache for MySQL on an AWS Arm based Instance"
 
-weight: 3 # 1 is first, 2 is second, etc.
+weight: 4 # 1 is first, 2 is second, etc.
 
 # Do not modify these elements
 layout: "learningpathall"
@@ -220,7 +220,7 @@ Here is the complete YML file for Ansible-Playbook for both instances. This Play
         state: restarted
 ```
 
-**NOTE:-** We are using [table1.sql](https://github.com/hirnimeshrampuresoftware/arm-software-developers-ads/files/10729309/table1.txt) and [table2.sql](https://github.com/hirnimeshrampuresoftware/arm-software-developers-ads/files/10729310/table2.txt)
+**NOTE:-** We are using [table1.sql](/learning-paths/server-and-cloud/memcached/input_data#table1sql) and [table2.sql](/learning-paths/server-and-cloud/memcached/input_data#table2sql)
  script file to dump data in **MYSQL_TEST[0]** and **MYSQL_TEST[1]** instances respectively. Specify the path of the files accordingly. Replace **{{Your_mysql_password}}** and **{{Give_any_password}}** with your own password.
 
 ### Ansible Commands
