@@ -8,12 +8,24 @@ weight: 2 # 1 is first, 2 is second, etc.
 layout: "learningpathall"
 ---
 
-## Prerequisites
+## Before you begin
 
-* [Azure account](https://azure.microsoft.com/)
-* [Install Terraform](https://www.terraform.io/downloads)
-* [Install Kubectl](https://kubernetes.io/docs/tasks/tools/)
-* [Install Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt)
+Any computer which has the required tools installed can be used for this section. 
+
+You will need an [Azure account](https://azure.microsoft.com/). Create an account if needed.
+
+Three tools are required on the computer you are using. Follow the links to install the required tools.
+* [Terraform](/install-guides/terraform)
+* [Kubectl](/install-guides/kubectl/)
+* [Azure CLI](/install-guides/azure-cli)
+
+## Azure authentication
+
+For authentication, follow this [documentation](/learning-paths/server-and-cloud/azure/terraform#azure-authentication).
+
+## Create an SSH key pair
+
+Generate an SSH key-pair (public key, private key) using `ssh-keygen`. To generate the key-pair, follow this [documentation](/install-guides/ssh#ssh-keys).
 
 ## Deploy the AKS cluster
 
@@ -116,18 +128,6 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 The block labeled **default_node_pool** is where we select the VM **(vm_size)** and number of nodes **(node_count)** for the cluster. **vm_size** is how we set the cluster to be deployed with Altra Arm-based VMs. Here we select **Standard_D2ps_v5** which is a 2 vCPU Altra-based VM with standard SSDs.
 
 There are various Arm-based VMs that can be selected. The [Azure VM series descriptions](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/series/) show that the Dpsv5, Dpdsv5, Dplsv5, Dpldsv5, Epsv5, Epdsv5 all use Ampere Altra. Using any of these VM types creates an Arm-based cluster.
-
-Log into Azure.
-
-```console
-az login
-```
-
-Create an SSH key pair.
-
-```console
-ssh-keygen -m PEM -t rsa -b 4096
-```
 
 Initialize a working directory containing Terraform configuration files.
 

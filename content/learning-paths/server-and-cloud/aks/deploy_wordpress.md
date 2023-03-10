@@ -8,9 +8,8 @@ weight: 3 # 1 is first, 2 is second, etc.
 layout: "learningpathall"
 ---
 
-## Prerequisites
-
-* [An AKS cluster](/learning-paths/server-and-cloud/aks/cluster_deployment/)
+## Before you begin
+Before moving ahead follow [an AKS cluster](/learning-paths/server-and-cloud/aks/cluster_deployment/) documentation for deploying the cluster.
 
 ## Deploy WordPress Example
 

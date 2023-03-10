@@ -8,17 +8,22 @@ weight: 3 # 1 is first, 2 is second, etc.
 layout: "learningpathall"
 ---
 
+## Before you begin
+
+Any computer which has the required tools installed can be used for this section. 
+
+You will need an [Azure portal account](https://portal.azure.com/). Create an account if needed.
+
+Two tools are required on the computer you are using. Follow the links to install the required tools.
+* [Terraform](/install-guides/terraform)
+* [Azure CLI](/install-guides/azure-cli)
+
 ##  Deploy a Arm based virtual machine using Terraform.
 
-## Prerequisites
+## Generate an SSH key-pair
 
-* An Azure portal account
-* An [installation of Terraform](https://www.terraform.io/cli/install/apt)
-* An installation of [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt).
-
-## Azure-cli installation
-
-Follow [Azure installation steps](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt).
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for Arm VMs access. To generate the key-pair, follow this [
+documentation](/install-guides/ssh#ssh-keys).
 
 ## Azure authentication
 
@@ -33,26 +38,6 @@ Run in browser as below:
 
 You will see details in command line as below after logging in browser
 ![image](https://user-images.githubusercontent.com/42368140/197953418-ddb9cd41-72b9-4a97-88f1-1f490644f36b.PNG)
-
-## Generate key-pair (public key, private key) using ssh keygen
-
-### Generate the public key and private key
-
-Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with Arm VMs.
-
-Generate the key pair using the following command:
-
-```console
-ssh-keygen -t rsa -b 2048
-``` 
-
-By default, the above command will generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path (for example, **/home/ubuntu/azure/** followed by key name **azure_key**).
-
-Output when a key pair is generated:
-
-![image](https://user-images.githubusercontent.com/42368140/196460197-587b96b5-f108-432b-85d6-9cf9976d26a1.PNG)
-
-**Note:** Use the public key **azure_key.pub** inside the Terraform file to provision/start the Arm VMs and private key **azure_key** to connect to the virtual machine. 
 
 ## Image References
 
@@ -261,7 +246,7 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
 
   admin_ssh_key {
     username= "azureuser"
-    public_key = file("/home/ubuntu/azure/azure_keys.pub")
+    public_key = file("~/.ssh/id_rsa.pub")
   }
 
   boot_diagnostics {
@@ -315,31 +300,31 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 ```console
 terraform apply main.tfplan
 ```
-![image](https://user-images.githubusercontent.com/42368140/196460956-609770ff-c263-4dd6-b8ad-03c740ec42cf.PNG)
+![image](https://user-images.githubusercontent.com/67620689/226273370-4da93d13-8ceb-496c-a532-a5bdfb3b9bc2.PNG)
 
 ### Verify created resources
 Go to Azure Dashboard and choose **Resource group** created from Terraform.
 
-![image](https://user-images.githubusercontent.com/42368140/196461182-bde106db-1def-4270-be53-df97b87be21b.PNG)
+![image](https://user-images.githubusercontent.com/67620689/226273353-2399d7cc-4953-453a-85dc-f6edbc5b7ae2.PNG)
 
 Go to Azure Dashboard and choose **Virtual Machine** created from Terraform.
 
-![image](https://user-images.githubusercontent.com/42368140/196461281-d56abe30-9a4f-42e8-9533-895ef779ebf1.PNG)
+![image](https://user-images.githubusercontent.com/67620689/226273374-591e0a7d-b571-4fd2-92ce-e01ffbe1a984.PNG)
 
 ### Use private key to SSH into Azure VM
-Connect to Azure VM using the private key(/home/ubuntu/azure/azure_key) created through `ssh-keygen`.
+Connect to Azure VM using the private key(~/.ssh/id_rsa) created through `ssh-keygen`.
 
 Use the connect command mentioned in the azure VM **GOTO >> connect** section:
 
-![image](https://user-images.githubusercontent.com/42368140/196461435-bf928a89-4c3f-453b-8d20-91c384e6552f.PNG)
+![image](https://user-images.githubusercontent.com/67620689/226273378-9ccef889-b626-4d8a-9dfe-bd1a546dc29c.PNG)
 
 Run following command to connect to VM through SSH:
 
 ```console
-ssh -i "/home/ubuntu/azure/azure_key" azureuser@<Public IP>
+ssh -i "~/.ssh/id_rsa" azureuser@<Public IP>
 ```
 
-![image](https://user-images.githubusercontent.com/42368140/196461586-4e2a93ba-2379-4d7c-b737-b0918eaa54da.PNG)
+![image](https://user-images.githubusercontent.com/67620689/226273380-8bc0271d-1278-4c86-a5ce-544cc263d71f.PNG)
 
 ### Clean up resources
 

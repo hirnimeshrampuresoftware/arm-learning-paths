@@ -10,13 +10,22 @@ layout: "learningpathall"
 
 ##  Deploy single instance of MySQL 
 
-## Prerequisites
+## Before you begin
 
-* An [AWS account](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start)
-* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+Any computer which has the required tools installed can be used for this section.
+
+You will need an [AWS account](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start). Create an account if needed.
+
+Four tools are required on the computer you are using. Follow the links to install the required tools.
+* [AWS CLI](/install-guides/aws-cli)
 * [AWS IAM authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
-* [Ansible](https://www.cyberciti.biz/faq/how-to-install-and-configure-latest-version-of-ansible-on-ubuntu-linux/)
+* [Ansible](/install-guides/ansible)
 * [Terraform](/install-guides/terraform)
+
+## Generate an SSH key-pair
+
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
+documentation](/install-guides/ssh#ssh-keys).
 
 ## Generate Access keys (access key ID and secret access key)
 
@@ -34,28 +43,6 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
-## Generate key-pair(public key, private key) using ssh keygen
-
-### Generate the public key and private key
-
-Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
-
-Generate the key-pair using the following command:
-
-```console
-ssh-keygen -t rsa -b 2048
-```
-       
-By default, the above command will generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
-
-Output when a key pair is generated:
-
-![Screenshot (319)](https://user-images.githubusercontent.com/92315883/213113265-620eee1b-319d-4318-acfa-fae9a802471d.png)
-
-      
-**Note:** Use the public key mysql_key.pub inside the Terraform file to provision/start the instance and private key mysql_key to connect to the instance.
-
-
 ## Deploy EC2 instance via Terraform
 
 After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `3306`(MySQL). Below is a Terraform file called `main.tf` which will do this for us.
@@ -72,7 +59,7 @@ resource "aws_instance" "MYSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity.name]
-  key_name = "mysql_key"
+  key_name = "id_rsa"
   tags = {
     Name = "MYSQL_TEST"
   }
@@ -125,11 +112,11 @@ ansible-target1 ansible_connection=ssh ansible_host=${aws_instance.MYSQL_TEST.pu
 }
 
 resource "aws_key_pair" "deployer" {
-        key_name   = "mysql_key"
-        public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCUZXm6T6JTQBuxw7aFaH6gmxDnjSOnHbrI59nf+YCHPqIHMlGaxWw0/xlaJiJynjOt67Zjeu1wNPifh2tzdN3UUD7eUFSGcLQaCFBDorDzfZpz4wLDguRuOngnXw+2Z3Iihy2rCH+5CIP2nCBZ+LuZuZ0oUd9rbGy6pb2gLmF89GYzs2RGG+bFaRR/3n3zR5ehgCYzJjFGzI8HrvyBlFFDgLqvI2KwcHwU2iHjjhAt54XzJ1oqevRGBiET/8RVsLNu+6UCHW6HE9r+T5yQZH50nYkSl/QKlxBj0tGHXAahhOBpk0ukwUlfbGcK6SVXmqtZaOuMNlNvssbocdg1KwOH ubuntu@ip-172-31-27-185"
+        key_name   = "id_rsa"
+        public_key = "ssh-rsa AAAAxxxxxxxxxxxxxxxxxxxxxxxx"
  }
 ```
-**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with your values.
+**NOTE:-** Replace `public_key`, `access_key`, and `secret_key` with your values.
 
 Now, use the below Terraform commands to deploy the `main.tf` file.
 
@@ -247,16 +234,15 @@ In our case, the inventory file will generate automatically after the `terraform
 ### Ansible Commands
 To run a Playbook, we need to use the `ansible-playbook` command.
 ```console
-ansible-playbook {your_yml_file} -i {your_inventory_file} --key-file {path_to_private_key}
+ansible-playbook {your_yml_file} -i {your_inventory_file} --key-file ~/.ssh/id_rsa
 ```
-**NOTE:-** Replace `{your_yml_file}`, `{your_inventory_file}` and `{path_to_private_key}` with your values.
+**NOTE:-** Replace `{your_yml_file}` and `{your_inventory_file}` with your values.
 
-![Screenshot (321)](https://user-images.githubusercontent.com/92315883/213113765-5629b2b5-066c-47f7-95b0-fecab2a0c6df.png)
+![Screenshot (321)](https://user-images.githubusercontent.com/67620689/226536416-5e963300-d35a-4ab6-9896-43294299a6c1.PNG)
 
 Here is the output after the successful execution of the `ansible-playbook` command.
 
-![Screenshot (323)](https://user-images.githubusercontent.com/92315883/213113832-14d67081-98dd-4acd-a679-34335346502b.png)
-
+![Screenshot (323)](https://user-images.githubusercontent.com/67620689/226536425-9f89202a-41d7-47eb-a57b-46d801377730.PNG)
 
 ## Connect to Database using EC2 instance
 
@@ -273,7 +259,7 @@ mysql -h {public_ip of instance where Mysql deployed} -P3306 -u {user of databas
 **NOTE:-** Replace `{public_ip of instance where Mysql deployed}`, `{user_name of database}` and `{password of database}` with your values. In our case `user_name`= `Local_user`, which we have created through the `.yml` file. 
 
 
-![Screenshot (324)](https://user-images.githubusercontent.com/92315883/213113944-e366ef74-8242-491d-b7ec-c305dba8ef0f.png)
+![Screenshot (324)](https://user-images.githubusercontent.com/67620689/226536431-f4caa4ff-7b2f-4df8-8fe3-e72dc91c5800.PNG)
 
 ### Access Database and Create Table
 
