@@ -8,31 +8,49 @@ weight: 4 # 1 is first, 2 is second, etc.
 layout: "learningpathall"
 ---
 
+##  Deploy Memcached as a cache for MySQL on an AWS Arm based Instance
+
+You can deploy Memcached as a cache for MySQL on an AWS Arm based Instance using Terraform and Ansible. 
+
+In this topic, you will deploy Memcached as a cache for MySQL on an AWS Instance, and in the next topic you will deploy Memcached as a cache for MySQL on an Azure Instance. 
+
+If you are new to Terraform, you should look at [Automate AWS EC2 instance creation using Terraform](/learning-paths/server-and-cloud/aws/terraform/) before starting this Learning Path.
+
 ## Before you begin
 
-Any computer which has the required tools installed can be used for this section. 
+You should have the prerequisite tools installed before starting the Learning Path. 
 
-You will need [an AWS account](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start). Create an account if needed.
+Any computer which has the required tools installed can be used for this section. The computer can be your desktop or laptop computer or a virtual machine with the required tools. 
 
-Following tools are required on the computer you are using. Follow the links to install the required tools.
-* [AWS CLI](/install-tools/aws-cli)
-* [Ansible](https://www.cyberciti.biz/faq/how-to-install-and-configure-latest-version-of-ansible-on-ubuntu-linux/)
-* [Terraform](/install-tools/terraform)
-* [Python](https://beebom.com/how-install-python-ubuntu-linux/)
-* [Memcached](/learning-paths/server-and-cloud/memcached/memcached#install-memcached-from-source-on-arm-servers)
-* [Telnet](https://adamtheautomator.com/linux-to-install-telnet/)
+You will need an [AWS account](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start) to complete this Learning Path. Create an account if you don't have one.
 
-## Deploy MySQL instances via Terraform
+Before you begin you will also need:
+- An AWS access key ID and secret access key. 
+- An SSH key pair
 
-### Generate Access keys (access key ID and secret access key)
-The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via the AWS CLI.
-To generate an access key and secret key, follow this [documentation](/learning-paths/server-and-cloud/aws/terraform#generate-access-keys-access-key-id-and-secret-access-key).
+The instructions to create the keys are below.
 
-### Generate key-pair (public key, private key)
-Before using Terraform, first generate the key-pair (public key and private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances. To generate the key-pair, follow this [documentation](/learning-paths/server-and-cloud/aws/terraform#generate-key-pairpublic-key-private-key-using-ssh-keygen).
+### Generate AWS access keys 
 
-### Create Terraform file (main.tf)
-After generating the keys, we have to create the MySQL instances. Then we will push our public key to the **authorized_keys** folder in **~/.ssh**. We will also create a security group that opens inbound ports **22** (ssh) and **3306** (MySQL). Below is a Terraform file called **main.tf** that will do this for us. Here we are creating 2 instances.
+Terraform requires AWS authentication to create AWS resources. You can generate access keys (access key ID and secret access key) to perform authentication. Terraform uses the access keys to make calls to AWS using the AWS CLI. 
+
+To generate an access key and secret access key, follow the [steps from the Terraform Learning Path](/learning-paths/server-and-cloud/aws/terraform#generate-access-keys-access-key-id-and-secret-access-key).
+
+### Generate an SSH key-pair
+
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access: 
+
+```console
+ssh-keygen -f aws_key -t rsa -b 2048 -P ""
+```
+
+You should now have your AWS access keys and your SSH keys in the current directory.
+
+## Create an AWS EC2 instance using Terraform
+
+Using a text editor, save the code below to in a file called `main.tf`
+
+Scroll down to see the information you need to change in `main.tf`
     
 ```console
 provider "aws" {
@@ -42,10 +60,10 @@ provider "aws" {
 }
   resource "aws_instance" "MYSQL_TEST" {
   count         = "2"
-  ami           = "ami-064593a301006939b"
+  ami           = "ami-0ca2eafa23bc3dd01"
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity1.name]
-  key_name = "mysql_h"
+  key_name = "aws_key"
   tags = {
     Name = "MYSQL_TEST"
   }
@@ -88,7 +106,7 @@ resource "aws_security_group" "Terraformsecurity1" {
  }
 resource "local_file" "inventory" {
     depends_on=[aws_instance.MYSQL_TEST]
-    filename = "/path/to/inventory/inventory.txt"
+    filename = "(your_current_directory)/hosts"
     content = <<EOF
 [mysql1]
 ${aws_instance.MYSQL_TEST[0].public_ip}
@@ -101,19 +119,92 @@ ansible_user=ubuntu
 }
 
 resource "aws_key_pair" "deployer" {
-        key_name   = "mysql_h"
+        key_name   = "aws_key"
         public_key = "ssh-rsaxxxxxxxxxxxxxxx"
 } 
     
 ```
-**NOTE:-** Replace **public_key**, **access_key**, **secret_key**, and **key_name** with respective values. The Terraform commands will automatically generate the **inventory.txt** file on the path provided in the filename. Specify the path accordingly.
+Make the changes listed below in `main.tf` to match your account settings.
 
-### Terraform Commands
-To deploy the instances, we need to initialize Terraform, generate an execution plan and apply the execution plan to our cloud infrastructure. Follow this [documentation](/learning-paths/server-and-cloud/aws/terraform#terraform-commands) to deploy the **main.tf** file.
+1. In the `provider` section, update all 3 values to use your preferred AWS region and your AWS access key ID and secret access key.
+
+2. (optional) In the `aws_instance` section, change the ami value to your preferred Linux distribution. The AMI ID for Ubuntu 22.04 on Arm is `ami-0ca2eafa23bc3dd01`. No change is needed if you want to use Ubuntu AMI. 
+
+{{% notice Note %}}
+The instance type is t4g.small. This an an Arm-based instance and requires an Arm Linux distribution.
+{{% /notice %}}
+
+3. In the `aws_key_pair` section, change the `public_key` value to match your SSH key. Copy and paste the contents of your aws_key.pub file to the `public_key` string. Make sure the string is a single line in the text file.
+
+4. in the `local_file` section, change the `filename` to be the path to your current directory.
+
+The hosts file is automatically generated and does not need to be changed, change the path to the location of the hosts file.
+
+## Terraform Commands
+
+Use Terraform to deploy the `main.tf` file.
+
+### Initialize Terraform
+
+Run `terraform init` to initialize the Terraform deployment. This command downloads the dependencies required for AWS.
+
+```console
+terraform init
+```
+    
+The output should be similar to:
+
+```console
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/local from the dependency lock file
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/local v2.3.0
+- Using previously-installed hashicorp/aws v4.52.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+```
+
+### Create a Terraform execution plan
+
+Run `terraform plan` to create an execution plan.
+
+```console
+terraform plan
+```
+
+A long output of resources to be created will be printed. 
+
+### Apply a Terraform execution plan
+
+Run `terraform apply` to apply the execution plan and create all AWS resources: 
+
+```console
+terraform apply
+```      
+
+Answer `yes` to the prompt to confirm you want to create AWS resources. 
+
+The output should be similar to:
+
+```console
+Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
+```
 
 ## Configure MySQL through Ansible
-To run Ansible, we have to create a **.yml** file, which is also known as an **Ansible-Playbook**. The Playbook contains a collection of tasks.            
-Here is the complete YML file for Ansible-Playbook for both instances. This Playbook installs & enables MySQL in the instances and creates databases & tables inside them.  
+
+Install MySQL and the required dependencies. 
+
+Using a text editor, save the code below to in a file called `playbook.yaml`. This is the YAML file for the Ansible playbook. 
 
 ```console
 ---
@@ -154,20 +245,6 @@ Here is the complete YML file for Ansible-Playbook for both instances. This Play
         login_host: localhost
         state: present
         login_unix_socket: /run/mysqld/mysqld.sock
-    - name: Copy database dump file
-      when: "'mysql1' in group_names"    
-      copy:
-       src: path/to/table1.sql
-       dest: /tmp
-    - name: Create a table with dummy values in database
-      when: "'mysql1' in group_names"    
-      community.mysql.mysql_db:
-       name: arm_test1
-       login_user: root
-       login_password: {{Your_mysql_password}}
-       login_host: localhost
-       state: import
-       target: /tmp/table1.sql
     - name: Create a new database with name 'arm_test2'
       when: "'mysql2' in group_names"
       community.mysql.mysql_db:
@@ -177,20 +254,6 @@ Here is the complete YML file for Ansible-Playbook for both instances. This Play
         login_host: localhost
         state: present
         login_unix_socket: /run/mysqld/mysqld.sock
-    - name: Copy database dump file
-      when: "'mysql2' in group_names"    
-      copy:
-       src: path/to/table2.sql
-       dest: /tmp
-    - name: Create a table with dummy values in database
-      when: "'mysql2' in group_names"    
-      community.mysql.mysql_db:
-       name: arm_test2
-       login_user: root
-       login_password: {{Your_mysql_password}}
-       login_host: localhost
-       state: import
-       target: /tmp/table2.sql       
     - name: MySQL secure installation
       become: yes
       expect:
@@ -220,22 +283,25 @@ Here is the complete YML file for Ansible-Playbook for both instances. This Play
         state: restarted
 ```
 
-**NOTE:-** We are using [table1.sql](/learning-paths/server-and-cloud/memcached/input_data#table1sql) and [table2.sql](/learning-paths/server-and-cloud/memcached/input_data#table2sql)
- script file to dump data in **MYSQL_TEST[0]** and **MYSQL_TEST[1]** instances respectively. Specify the path of the files accordingly. Replace **{{Your_mysql_password}}** and **{{Give_any_password}}** with your own password.
+**NOTE:-** Replace `{{Your_mysql_password}}` and `{{Give_any_password}}` with your own password.
 
 ### Ansible Commands
-To run a Playbook, we need to use the **ansible-playbook** command.
+
+Substitute your private key name, and run the playbook using the  `ansible-playbook` command:
+
 ```console
-ansible-playbook {your_yml_file} -i {your_inventory_file} --key-file {path_to_private_key}
+ansible-playbook playbook.yaml -i hosts --key-file aws_key
 ```
-**NOTE:-** Replace **{your_yml_file}**, **{your_inventory_file}** and **{path_to_private_key}** with your values.
 
-![ansible-end-finalfinalfinalfinal](https://user-images.githubusercontent.com/71631645/221770813-0edcb4d0-ca99-48c6-ab60-500eee6ca4d0.jpg)
+Answer `yes` when prompted for the SSH connection. 
 
-Here is the output after the successful execution of the **ansible-playbook** commands.
+Deployment may take a few minutes. 
 
-![this](https://user-images.githubusercontent.com/71631645/221770451-320f9ce9-90fb-44ae-9a0d-45d54214e903.jpg)
+The output should be similar to:
 
+```console
+
+```
 ## Deploy Memcached as a cache for MySQL using Python
 We create two **.py** files on the host machine to deploy Memcached as a MySQL cache using Python: **values.py** and **mem.py**.  
 
