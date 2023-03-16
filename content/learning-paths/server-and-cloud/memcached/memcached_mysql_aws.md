@@ -391,7 +391,7 @@ mysql>
 
 ### Access Database and Create Table
 
-We can access our database by using the below commands.
+1. We can access our database by using the below commands.
 
 ```console
 show databases;
@@ -415,9 +415,11 @@ mysql> show databases;
 | sys                |
 +--------------------+
 5 rows in set (0.00 sec)
+mysql> use arm_test1;
+Database changed
 ```
 
-Use the below commands to create a table and insert values into it.
+2. Use the below commands to create a table and insert values into it.
 
 ```console
 create table book(name char(10),id varchar(10));
@@ -440,23 +442,83 @@ Records: 7  Duplicates: 0  Warnings: 0
 
 ```
 
-Use the below command to access the content of the table.
+3. Use the below command to access the content of the table.
 
 ```console
 select * from {{your_table_name}};
 ```
 
-## Deploy Memcached as a cache for MySQL using Python
-We create two **.py** files on the host machine to deploy Memcached as a MySQL cache using Python: **values.py** and **mem.py**.  
+The output will be:
 
-**values.py** to store the IP addresses of the instances and the databases created in them.
+```console
+mysql> select * from book
+    -> ;
++--------+------+
+| name   | id   |
++--------+------+
+| Abook  | 10   |
+| Bbook  | 20   |
+| Cbook  | 20   |
+| Dbook  | 30   |
+| Ebook  | 45   |
+| Fbook  | 40   |
+| Gbook
+ | 69   |
++--------+------+
+7 rows in set (0.00 sec)
+```
+
+4. Now connect to second instance and repeat the above steps.
+The output will be:
+
+```console
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| arm_test2          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use arm_test2;
+Database changed
+mysql> create table movie(name char(10),id varchar(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into movie(name,id) values ('Amovie','1'), ('Bmovie','2'), ('Cmovie','3'), ('Dmovie','4'), ('Emovie','5'), ('Fmovie','6'), ('Gmovie','7');
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from movie;
++--------+------+
+| name   | id   |
++--------+------+
+| Amovie | 1    |
+| Bmovie | 2    |
+| Cmovie | 3    |
+| Dmovie | 4    |
+| Emovie | 5    |
+| Fmovie | 6    |
+| Gmovie | 7    |
++--------+------+
+7 rows in set (0.00 sec)
+```
+
+## Deploy Memcached as a cache for MySQL using Python
+We create two **.py** files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `mem.py`.  
+
+`values.py` to store the IP addresses of the instances and the databases created in them.
 ```console
 MYSQL_TEST=[["{{public_ip of MYSQL_TEST[0]}}", "arm_test1"],
 ["{{public_ip of MYSQL_TEST[1]}}", "arm_test2"]]
 ```
-We are using the **arm_test1** and **arm_test2** databases created above through Ansible-Playbook. Replace **{{public_ip of MYSQL_TEST[0]}}** & **{{public_ip of MYSQL_TEST[1]}}** with the public IPs generated in the **inventory.txt** file after running the Terraform commands.       
+We are using the `arm_test1` and `arm_test2` databases created above through Ansible-Playbook. Replace `{{public_ip of MYSQL_TEST[0]}}` & `{{public_ip of MYSQL_TEST[1]}}` with the public IPs generated in the `hosts` file after running the Terraform commands.       
 
-**mem.py** to access data from Memcached and, if not present, store it in the Memcached.       
+`mem.py` to access data from Memcached and, if not present, store it in the Memcached.       
 ```console
 import sys
 import MySQLdb
