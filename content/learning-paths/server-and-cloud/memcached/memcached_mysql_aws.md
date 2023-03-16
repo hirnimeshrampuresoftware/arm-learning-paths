@@ -134,9 +134,9 @@ Make the changes listed below in `main.tf` to match your account settings.
 The instance type is t4g.small. This an an Arm-based instance and requires an Arm Linux distribution.
 {{% /notice %}}
 
-3. In the `aws_key_pair` section, change the `public_key` value to match your SSH key. Copy and paste the contents of your aws_key.pub file to the `public_key` string. Make sure the string is a single line in the text file.
+3. In the `aws_key_pair` section, change the `public_key` value to match your SSH key. Copy and paste the contents of your `aws_key.pub` file to the `public_key` string. Make sure the string is a single line in the text file.
 
-4. in the `local_file` section, change the `filename` to be the path to your current directory.
+4. In the `local_file` section, change the `filename` to be the path to your current directory.
 
 The hosts file is automatically generated and does not need to be changed, change the path to the location of the hosts file.
 
@@ -300,7 +300,61 @@ Deployment may take a few minutes.
 The output should be similar to:
 
 ```console
+hirni@ip-172-31-38-39:~/mysql_final$ ansible-playbook mysqlmodule.yml -i hosts --key-file ../.ssh/aws_key
 
+PLAY [mysql1, mysql2] ********************************************************************************************************************************************
+
+TASK [Gathering Facts] *******************************************************************************************************************************************
+The authenticity of host '13.59.220.179 (13.59.220.179)' can't be established.
+ED25519 key fingerprint is SHA256:6NBcdhBr1+nppeL27zwkXOTVnWUZGRQYVUuJOkQvGY4.
+This key is not known by any other names
+The authenticity of host '3.15.227.23 (3.15.227.23)' can't be established.
+ED25519 key fingerprint is SHA256:0tq05+K/EPSM7rDFQBESqO3feDbk+F3XmZgjOpi6+jM.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+yes
+ok: [13.59.220.179]
+ok: [3.15.227.23]
+
+TASK [Update the Machine and Install dependencies] ***************************************************************************************************************
+changed: [13.59.220.179]
+changed: [3.15.227.23]
+
+TASK [start and enable mysql service] ****************************************************************************************************************************
+ok: [13.59.220.179]
+ok: [3.15.227.23]
+
+TASK [Change Root Password] **************************************************************************************************************************************
+changed: [13.59.220.179]
+changed: [3.15.227.23]
+
+TASK [Create database user with password and all database privileges and 'WITH GRANT OPTION'] ********************************************************************
+changed: [13.59.220.179]
+changed: [3.15.227.23]
+
+TASK [Create a new database with name 'arm_test1'] ***************************************************************************************************************
+skipping: [3.15.227.23]
+changed: [13.59.220.179]
+
+TASK [Create a new database with name 'arm_test2'] ***************************************************************************************************************
+skipping: [13.59.220.179]
+changed: [3.15.227.23]
+
+TASK [MySQL secure installation] *********************************************************************************************************************************
+changed: [3.15.227.23]
+changed: [13.59.220.179]
+
+TASK [Enable remote login by changing bind-address] **************************************************************************************************************
+changed: [3.15.227.23]
+changed: [13.59.220.179]
+
+RUNNING HANDLER [Restart mysql] **********************************************************************************************************************************
+changed: [13.59.220.179]
+changed: [3.15.227.23]
+
+PLAY RECAP *******************************************************************************************************************************************************
+13.59.220.179              : ok=9    changed=7    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
+3.15.227.23                : ok=9    changed=7    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
 ```
 
 ## Connect to Database using EC2 instance
@@ -314,9 +368,26 @@ apt install mysql-client
 ```console
 mysql -h {public_ip of instance where Mysql deployed} -P3306 -u {user of database} -p{password of database}
 ```
+Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and `{password of database}` with your values. In our case `user`= `Local_user`, which we have created through the `.yml` file. 
 
-**NOTE:-** Replace `{public_ip of instance where Mysql deployed}`, `{user_name of database}` and `{password of database}` with your values. In our case `user_name`= `Local_user`, which we have created through the `.yml` file. 
+The output will be:
+```console
+ubuntu@ip-172-31-38-39:~/mysql_final$ mysql -h 13.59.220.179 -P3306 -u Local_user -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.32-0ubuntu0.22.04.2 (Ubuntu)
 
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
+```
 
 ### Access Database and Create Table
 
@@ -325,8 +396,25 @@ We can access our database by using the below commands.
 ```console
 show databases;
 ```
+
 ```console
 use {your_database};
+```
+
+The output will be:
+
+```console
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| arm_test1          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
 ```
 
 Use the below commands to create a table and insert values into it.
@@ -338,6 +426,20 @@ create table book(name char(10),id varchar(10));
 insert into book(name,id) values ('Abook','10'),('Bbook','20'),('Cbook','20'),('Dbook','30'),('Ebook','45'),('Fbook','40'),('Gbook
 ','69');
 ```
+
+The output will be:
+
+```console
+mysql> create table book(name char(10),id varchar(10));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into book(name,id) values ('Abook','10'),('Bbook','20'),('Cbook','20'),('Dbook','30'),('Ebook','45'),('Fbook','40'),('Gbook
+    '> ','69');
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+```
+
 Use the below command to access the content of the table.
 
 ```console
