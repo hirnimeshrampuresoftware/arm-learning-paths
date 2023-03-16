@@ -302,6 +302,48 @@ The output should be similar to:
 ```console
 
 ```
+
+## Connect to Database using EC2 instance
+
+To connect to the database, we need the `public-ip` of the instance where MySQL is deployed. We also need to use the MySQL Client to interact with the MySQL database.
+
+```console
+apt install mysql-client
+```
+
+```console
+mysql -h {public_ip of instance where Mysql deployed} -P3306 -u {user of database} -p{password of database}
+```
+
+**NOTE:-** Replace `{public_ip of instance where Mysql deployed}`, `{user_name of database}` and `{password of database}` with your values. In our case `user_name`= `Local_user`, which we have created through the `.yml` file. 
+
+
+### Access Database and Create Table
+
+We can access our database by using the below commands.
+
+```console
+show databases;
+```
+```console
+use {your_database};
+```
+
+Use the below commands to create a table and insert values into it.
+
+```console
+create table book(name char(10),id varchar(10));
+```
+```console
+insert into book(name,id) values ('Abook','10'),('Bbook','20'),('Cbook','20'),('Dbook','30'),('Ebook','45'),('Fbook','40'),('Gbook
+','69');
+```
+Use the below command to access the content of the table.
+
+```console
+select * from {{your_table_name}};
+```
+
 ## Deploy Memcached as a cache for MySQL using Python
 We create two **.py** files on the host machine to deploy Memcached as a MySQL cache using Python: **values.py** and **mem.py**.  
 
