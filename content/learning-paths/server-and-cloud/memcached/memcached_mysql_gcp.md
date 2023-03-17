@@ -2,47 +2,64 @@
 # User change
 title: "Deploy Memcached as a cache for MySQL on a Google Cloud Arm based Instance"
 
-weight: 6 # 1 is first, 2 is second, etc.
+weight: 5 # 1 is first, 2 is second, etc.
 
 # Do not modify these elements
 layout: "learningpathall"
 ---
 
+##  Deploy Memcached as a cache for MySQL on a Google Cloud Arm based Instance
+
+You can deploy Memcached as a cache for MySQL on Google Cloud using Terraform and Ansible. 
+
+In this topic, you will deploy Memcached as a cache for MySQL on Google Cloud instance.
+
+If you are new to Terraform, you should look at [Automate GCP instance creation using Terraform](/learning-paths/server-and-cloud/gcp/terraform/) before starting this Learning Path.
+
 ## Before you begin
 
-Any computer which has the required tools installed can be used for this section. 
+You should have the prerequisite tools installed before starting the Learning Path. 
 
-You will need a [Google Cloud account](https://console.cloud.google.com/). Create an account if needed.
+Any computer which has the required tools installed can be used for this section. The computer can be your desktop or laptop computer or a virtual machine with the required tools. 
 
-Following tools are required on the computer you are using. Follow the links to install the required tools.
-* [Google Cloud CLI](/install-tools/gcloud)
-* [Ansible](https://www.cyberciti.biz/faq/how-to-install-and-configure-latest-version-of-ansible-on-ubuntu-linux/)
-* [Terraform](/install-tools/terraform)
-* [Python](https://beebom.com/how-install-python-ubuntu-linux/)
-* [Memcached](/learning-paths/server-and-cloud/memcached/memcached#install-memcached-from-source-on-arm-servers)
-* [Telnet](https://adamtheautomator.com/linux-to-install-telnet/)
+You will need an [Google Cloud account](https://console.cloud.google.com/?hl=en-au) to complete this Learning Path. Create an account if you don't have one.
 
-## Deploy MySQL instances via Terraform
+Before you begin you will also need:
+- Login to Google Cloud CLI 
+- An SSH key pair
+
+The instructions to login to Google Cloud CLI and to create the keys are below.
 
 ### Acquire user credentials
-To obtain user access credentials, follow this [documentation](/learning-paths/server-and-cloud/gcp/terraform#acquire-user-credentials).
 
-### Generate key-pair (public key, private key)
-Before using Terraform, first generate the key-pair (public key and private key) using ssh-keygen. Then associate both public and private keys with Arm VMs. To generate the key-pair, follow this [documentation](/learning-paths/server-and-cloud/gcp/terraform#generate-key-pairpublic-key-private-key-using-ssh-keygen).
+To obtain user access credentials, follow the [steps from the Terraform Learning Path](/learning-paths/server-and-cloud/gcp/terraform#acquire-user-credentials).
 
-### Create Terraform file (main.tf)
-After generating the keys, we have to create the MySQL instances. Then we will push our public key to the authorized_keys folder in ~/.ssh. We will also create a security group that opens inbound ports **22** (ssh) and **3306** (MySQL). Below is a Terraform file called main.tf that will do this for us. Here we are creating 2 instances.
+### Generate an SSH key-pair
+
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for Google Cloud access. 
+
+```console
+ssh-keygen -f gcp_key -t rsa -b 2048 -P ""
+```
+
+You should now have your SSH keys in the current directory.
+
+## Create GCP instances using Terraform
+
+Using a text editor, save the code below in a file called `main.tf`. Here we are creating 2 instances.
+
+Scroll down to see the information you need to change in `main.tf`.
     
 ```console
 provider "google" {
-  project = "snappy-byway-368307"
+  project = "{project_id}"
   region = "us-central1"
   zone = "us-central1-a"
 }
 
 resource "google_compute_project_metadata_item" "ssh-keys" {
   key   = "ssh-keys"
-  value = "ubuntu:${file("/path/to/public_key.pub")}"
+  value = "ubuntu:${file("public_key_location")}"
 }
 
 resource "google_compute_instance" "MYSQL_TEST" {
@@ -84,7 +101,7 @@ resource "google_compute_network" "default" {
 }
 resource "local_file" "inventory" {
     depends_on=[google_compute_instance.MYSQL_TEST]
-    filename = "inventory.txt"
+    filename = "(your_current_directory)/hosts"
     content = <<EOF
 [mysql1]
 ${google_compute_instance.MYSQL_TEST[0].network_interface.0.access_config.0.nat_ip}
@@ -96,10 +113,81 @@ ansible_user=ubuntu
                 EOF
 }
 ```
-**NOTE**:- Replace the path of **public_key** with its respective value.
+Make the changes listed below in `main.tf` to match your account settings.
 
-### Terraform Commands
-To deploy the instances, we need to initialize Terraform, generate an execution plan and apply the execution plan to our cloud infrastructure. Follow this [documentation](/learning-paths/server-and-cloud/gcp/terraform#terraform-commands) to deploy the **main.tf** file.
+1. In the `provider` section, update the `project_id` with your value.
+
+2. In the `google_compute_project_metadata_item` section, change the `public_key_location` value to match your SSH key.
+
+3. In the `local_file` section, change the `filename` to be the path to your current directory.
+
+The hosts file is automatically generated and does not need to be changed, change the path to the location of the hosts file.
+
+## Terraform Commands
+
+Use Terraform to deploy the `main.tf` file.
+
+### Initialize Terraform
+
+Run `terraform init` to initialize the Terraform deployment. This command downloads the dependencies required for Google Cloud.
+
+```console
+terraform init
+```
+    
+The output should be similar to:
+
+```console
+Initializing the backend...
+
+Initializing provider plugins...
+- Finding latest version of hashicorp/google...
+- Finding latest version of hashicorp/local...
+- Installing hashicorp/google v4.57.0...
+- Installed hashicorp/google v4.57.0 (signed by HashiCorp)
+- Installing hashicorp/local v2.4.0...
+- Installed hashicorp/local v2.4.0 (signed by HashiCorp)
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+
+```
+
+### Create a Terraform execution plan
+
+Run `terraform plan` to create an execution plan.
+
+```console
+terraform plan
+```
+
+A long output of resources to be created will be printed. 
+
+### Apply a Terraform execution plan
+
+Run `terraform apply` to apply the execution plan and create all GCP resources. 
+
+```console
+terraform apply
+```      
+
+Answer `yes` to the prompt to confirm you want to create GCP resources. 
+
+```console
+
+```
 
 ## Configure MySQL through Ansible
 An Ansible Playbook installs & enables MySQL in the instances and creates databases & tables inside them. To configure MySQL through Ansible and run the Playbook, follow this [documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#configure-mysql-through-ansible).
