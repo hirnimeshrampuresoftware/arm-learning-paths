@@ -359,7 +359,7 @@ PLAY RECAP *********************************************************************
 
 ## Connect to Database using EC2 instance
 
-To connect to the database, we need the `public-ip` of the instance where MySQL is deployed. We also need to use the MySQL Client to interact with the MySQL database.
+To connect to the database, you need the `public-ip` of the instance where MySQL is deployed. You also need to use the MySQL Client to interact with the MySQL database.
 
 ```console
 apt install mysql-client
@@ -368,7 +368,7 @@ apt install mysql-client
 ```console
 mysql -h {public_ip of instance where Mysql deployed} -P3306 -u {user of database} -p{password of database}
 ```
-Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and `{password of database}` with your values. In our case `user`= `Local_user`, which we have created through the `.yml` file. 
+Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and `{password of database}` with your values. In this example, `user`= `Local_user`, which is getting created in the `playbook.yaml` file. 
 
 The output will be:
 ```console
@@ -391,7 +391,7 @@ mysql>
 
 ### Access Database and Create Table
 
-1. We can access our database by using the below commands.
+1. You can access your database by using the below commands.
 
 ```console
 show databases;
@@ -468,7 +468,7 @@ mysql> select * from book
 7 rows in set (0.00 sec)
 ```
 
-4. Now connect to second instance and repeat the above steps.
+4. Now connect to the second instance and repeat the above steps witha different table.
 The output will be:
 
 ```console
@@ -509,15 +509,14 @@ mysql> select * from movie;
 ```
 
 ## Deploy Memcached as a cache for MySQL using Python
-We create two **.py** files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `mem.py`.  
+You will create two `.py` files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `mem.py`.  
 
 `values.py` to store the IP addresses of the instances and the databases created in them.
 ```console
 MYSQL_TEST=[["{{public_ip of MYSQL_TEST[0]}}", "arm_test1"],
 ["{{public_ip of MYSQL_TEST[1]}}", "arm_test2"]]
 ```
-We are using the `arm_test1` and `arm_test2` databases created above through Ansible-Playbook. Replace `{{public_ip of MYSQL_TEST[0]}}` & `{{public_ip of MYSQL_TEST[1]}}` with the public IPs generated in the `hosts` file after running the Terraform commands.       
-
+Replace `{{public_ip of MYSQL_TEST[0]}}` & `{{public_ip of MYSQL_TEST[1]}}` with the public IPs generated in the `hosts` file after running the Terraform commands.       
 `mem.py` to access data from Memcached and, if not present, store it in the Memcached.       
 ```console
 import sys
@@ -565,33 +564,89 @@ for i in range(0,2):
 else:
     print("this database doesn't exist")            
 ```
-Replace **{{Your_database_user}}** & **{{Your_database_password}}** with the database user and password created through Ansible-Playbook. Also change the **range** in **for loop** according to the number of instances created.
+Replace `{{Your_database_user}}` & `{{Your_database_password}}` with the database user and password created through Ansible-Playbook. Also change the `range` in `for loop` according to the number of instances created.
 
 To execute the script, run the following command:
 ```console
 python3 mem.py -db {database_name} -k {key} -q {query}
 ```
-Replace **{database_name}** with the database you want to access, **{query}** with the query you want to run in the database and **{key}** with a variable to store the result of the query in Memcached.
+Replace `{database_name}` with the database you want to access, `{query}` with the query you want to run in the database and `{key}` with a variable to store the result of the query in Memcached.
 
 When the script is executed for the first time, the data is loaded from the MySQL database and stored on the Memcached server.
 
-![memupdate1](https://user-images.githubusercontent.com/71631645/218663086-19fec362-7360-4622-bd1c-cdb2389799dc.jpg)
-![memupdate2](https://user-images.githubusercontent.com/71631645/218663093-75c6033a-7feb-4326-ba55-3f5d3df03d82.jpg)
+The output will be:
+```console
+ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
+Updated memcached with MySQL data
+('Abook', '10')
+('Bbook', '20')
+('Cbook', '20')
+```
+```console
+ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
+Updated memcached with MySQL data
+('Amovie', '1')
+('Bmovie', '2')
+('Cmovie', '3')
+```
 
 When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120 second expiry time), the data is loaded from Memcached and dumped.
 
-![memload1](https://user-images.githubusercontent.com/71631645/218662938-f62ec905-89ea-4c6d-ac90-f505a75eca31.jpg)
-![memload2](https://user-images.githubusercontent.com/71631645/218662947-27e52617-eb9e-4cda-a2ad-b94a85709605.jpg)           
+The output will be:
+```console
+ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
+Loaded data from memcached
+Abook,10
+Bbook,20
+Cbook,20
+```
+
+```console
+ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
+Loaded data from memcached
+Amovie,1
+Bmovie,2
+Cmovie,3
+```
 
 ### Memcached Telnet Commands
-To verify that the MySQL query is getting stored in Memcached, connect to the Memcached server with Telnet and start a session:
+
+Execute the steps below to verify that the MySQL query is getting stored in Memcached
+1. Connect to the Memcached server with Telnet and start a session:
 ```console
 telnet localhost 11211
 ```
-To retrieve data from Memcached through Telnet:
+2. Retrieve data from Memcached through Telnet:
 ```console
 get <key>
 ```
-**NOTE:-** Key is the variable in which we store the data. In the above command, we are storing the data from table1 and table2 in **AA** and **BB** respectively.
+**NOTE:-** Key is the variable in which we store the data. In the above command, we are storing the data from the tables `book` and `movie` in `AA` and `BB` respectively.
 
-![telnetfinalfinal](https://user-images.githubusercontent.com/71631645/218663147-8a7e0d6f-39d5-4b2e-9487-501d3ffbf40b.jpg)
+The output will be:
+
+```console
+ubuntu@ip-172-31-38-39:~/mysql_final$ telnet localhost 11211
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+get AA
+VALUE AA 0 51
+(('Abook', '10'), ('Bbook', '20'), ('Cbook', '20'))
+END
+get BB
+VALUE BB 0 51
+(('Amovie', '1'), ('Bmovie', '2'), ('Cmovie', '3'))
+END
+```
+
+You have successfully deployed Memcached as a cache for MySQL on an AWS Arm based Instance.
+
+### Clean up resources
+
+Run `terraform destroy` to delete all resources created.
+
+```console
+terraform destroy
+```
+
+Continue the Learning Path to deploy Memcached as a cache for MySQL on an Azure Arm based Instance.
