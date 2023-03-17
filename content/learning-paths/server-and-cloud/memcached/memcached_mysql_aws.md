@@ -48,9 +48,9 @@ You should now have your AWS access keys and your SSH keys in the current direct
 
 ## Create an AWS EC2 instance using Terraform
 
-Using a text editor, save the code below to in a file called `main.tf`
+Using a text editor, save the code below to in a file called `main.tf`.
 
-Scroll down to see the information you need to change in `main.tf`
+Scroll down to see the information you need to change in `main.tf`.
     
 ```console
 provider "aws" {
@@ -186,7 +186,7 @@ A long output of resources to be created will be printed.
 
 ### Apply a Terraform execution plan
 
-Run `terraform apply` to apply the execution plan and create all AWS resources: 
+Run `terraform apply` to apply the execution plan and create all AWS resources.
 
 ```console
 terraform apply
@@ -283,7 +283,7 @@ Using a text editor, save the code below to in a file called `playbook.yaml`. Th
         state: restarted
 ```
 
-**NOTE:-** Replace `{{Your_mysql_password}}` and `{{Give_any_password}}` with your own password.
+Replace `{{Your_mysql_password}}` and `{{Give_any_password}}` with your own password.
 
 ### Ansible Commands
 
@@ -468,7 +468,7 @@ mysql> select * from book
 7 rows in set (0.00 sec)
 ```
 
-4. Now connect to the second instance and repeat the above steps witha different table.
+4. Now connect to the second instance and repeat the above steps with a different data as shown below.
 The output will be:
 
 ```console
@@ -509,6 +509,7 @@ mysql> select * from movie;
 ```
 
 ## Deploy Memcached as a cache for MySQL using Python
+
 You will create two `.py` files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `mem.py`.  
 
 `values.py` to store the IP addresses of the instances and the databases created in them.
