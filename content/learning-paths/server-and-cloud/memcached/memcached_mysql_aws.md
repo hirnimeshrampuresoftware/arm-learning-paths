@@ -357,7 +357,7 @@ PLAY RECAP *********************************************************************
 3.15.227.23                : ok=9    changed=7    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
 ```
 
-## Connect to Database using EC2 instance
+## Connect to Database from local machine
 
 To connect to the database, you need the `public-ip` of the instance where MySQL is deployed. You also need to use the MySQL Client to interact with the MySQL database.
 
