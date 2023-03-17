@@ -300,7 +300,7 @@ Deployment may take a few minutes.
 The output should be similar to:
 
 ```console
-hirni@ip-172-31-38-39:~/mysql_final$ ansible-playbook mysqlmodule.yml -i hosts --key-file ../.ssh/aws_key
+ubuntu@ip-172-31-38-39:~/mysql_final$ ansible-playbook mysqlmodule.yml -i hosts --key-file ../.ssh/aws_key
 
 PLAY [mysql1, mysql2] ********************************************************************************************************************************************
 
