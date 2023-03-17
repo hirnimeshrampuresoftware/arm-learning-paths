@@ -204,7 +204,7 @@ Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
 
 Install MySQL and the required dependencies. 
 
-Using a text editor, save the code below to in a file called `playbook.yaml`. This is the YAML file for the Ansible playbook. 
+Using a text editor, save the code below to in a file called `playbook.yaml`. This Playbook installs & enables MySQL in the instances and creates databases inside them.
 
 ```console
 ---
