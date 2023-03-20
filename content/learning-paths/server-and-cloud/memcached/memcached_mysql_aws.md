@@ -12,7 +12,7 @@ layout: "learningpathall"
 
 You can deploy Memcached as a cache for MySQL on an AWS Arm based Instance using Terraform and Ansible. 
 
-In this topic, you will deploy Memcached as a cache for MySQL on an AWS Instance. 
+In this section, you will deploy Memcached as a cache for MySQL on an AWS Instance. 
 
 If you are new to Terraform, you should look at [Automate AWS EC2 instance creation using Terraform](/learning-paths/server-and-cloud/aws/terraform/) before starting this Learning Path.
 
@@ -49,8 +49,6 @@ You should now have your AWS access keys and your SSH keys in the current direct
 ## Create an AWS EC2 instance using Terraform
 
 Using a text editor, save the code below to in a file called `main.tf`.
-
-Scroll down to see the information you need to change in `main.tf`.
     
 ```console
 provider "aws" {
@@ -283,7 +281,7 @@ Using a text editor, save the code below to in a file called `playbook.yaml`. Th
         state: restarted
 ```
 
-Replace `{{Your_mysql_password}}` and `{{Give_any_password}}` with your own password.
+Replace `{{Your_mysql_password}}` and `{{Give_any_password}}` in this file with your own password.
 
 ### Ansible Commands
 
