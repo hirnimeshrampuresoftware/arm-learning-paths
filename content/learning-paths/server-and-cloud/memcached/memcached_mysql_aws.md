@@ -612,11 +612,11 @@ Cmovie,3
 ### Memcached Telnet Commands
 
 Execute the steps below to verify that the MySQL query is getting stored in Memcached.
-1. Connect to the Memcached server with Telnet and start a session:
+1. Connect to the Memcached server with Telnet and start a session.
 ```console
 telnet localhost 11211
 ```
-2. Retrieve data from Memcached through Telnet:
+2. Retrieve data from Memcached through Telnet.
 ```console
 get <key>
 ```
