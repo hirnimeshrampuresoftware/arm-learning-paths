@@ -316,7 +316,7 @@ terraform apply
 
 Answer `yes` to the prompt to confirm you want to create Azure resources. 
 
-The public IP address will be different, but the output should be similar to:
+The output should be similar to:
 
 ```output
 Apply complete! Resources: 16 added, 0 changed, 0 destroyed.
