@@ -12,7 +12,7 @@ layout: "learningpathall"
 
 You can deploy Memcached as a cache for MySQL on Azure using Terraform and Ansible. 
 
-In this topic, you will deploy Memcached as a cache for MySQL on an Azure instance, and in the next topic you will deploy Memcached as a cache for MySQL on a Google Cloud instance. 
+In this topic, you will deploy Memcached as a cache for MySQL on an Azure instance. 
 
 If you are new to Terraform, you should look at [Automate Azure instance creation using Terraform](/learning-paths/server-and-cloud/azure/terraform/) before starting this Learning Path.
 
@@ -272,7 +272,7 @@ terraform init
     
 The output should be similar to:
 
-```console
+```output
 Initializing the backend...
 
 Initializing provider plugins...
@@ -318,7 +318,7 @@ Answer `yes` to the prompt to confirm you want to create Azure resources.
 
 The public IP address will be different, but the output should be similar to:
 
-```console
+```output
 Apply complete! Resources: 16 added, 0 changed, 0 destroyed.
 ```
 
@@ -342,7 +342,7 @@ Deployment may take a few minutes.
 
 The output should be similar to:
 
-```console
+```output
 ubuntu@ip-172-31-38-39:~/azure-mysql$ ansible-playbook playbook.yaml -i hosts --key-file azure_key
 
 PLAY [mysql1, mysql2] ********************************************************************************************************************************************
@@ -414,7 +414,7 @@ mysql -h {public_ip of instance where Mysql deployed} -P3306 -u {user of databas
 Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and `{password of database}` with your values. In this example, `user`= `Local_user`, which is getting created in the `playbook.yaml` file. 
 
 The output will be:
-```console
+```output
 ubuntu@ip-172-31-38-39:~/azure-mysql$ mysql -h 20.114.166.37 -P3306 -u Local_user -p
 Enter password:
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -445,7 +445,7 @@ use {your_database};
 
 The output will be:
 
-```console
+```output
 mysql> show databases;
 +--------------------+
 | Database           |
@@ -473,7 +473,7 @@ insert into book(name,id) values ('Abook','10'),('Bbook','20'),('Cbook','20'),('
 
 The output will be:
 
-```console
+```output
 mysql> create table book(name char(10),id varchar(10));
 Query OK, 0 rows affected (0.03 sec)
 
@@ -492,9 +492,8 @@ select * from {{your_table_name}};
 
 The output will be:
 
-```console
-mysql> select * from book
-    -> ;
+```output
+mysql> select * from book;
 +--------+------+
 | name   | id   |
 +--------+------+
@@ -513,7 +512,7 @@ mysql> select * from book
 4. Now connect to the second instance and repeat the above steps with a different data as shown below.
 The output will be:
 
-```console
+```output
 mysql> show databases;
 +--------------------+
 | Database           |
@@ -618,14 +617,14 @@ Replace `{database_name}` with the database you want to access, `{query}` with t
 When the script is executed for the first time, the data is loaded from the MySQL database and stored on the Memcached server.
 
 The output will be:
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
 Updated memcached with MySQL data
 ('Abook', '10')
 ('Bbook', '20')
 ('Cbook', '20')
 ```
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
 Updated memcached with MySQL data
 ('Amovie', '1')
@@ -636,7 +635,7 @@ Updated memcached with MySQL data
 When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120 second expiry time), the data is loaded from Memcached and dumped.
 
 The output will be:
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
 Loaded data from memcached
 Abook,10
@@ -644,7 +643,7 @@ Bbook,20
 Cbook,20
 ```
 
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
 Loaded data from memcached
 Amovie,1
@@ -667,7 +666,7 @@ get <key>
 
 The output will be:
 
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ telnet localhost 11211
 Trying 127.0.0.1...
 Connected to localhost.
@@ -692,4 +691,4 @@ Run `terraform destroy` to delete all resources created.
 terraform destroy
 ```
 
-Continue the Learning Path to deploy Memcached as a cache for MySQL on an Azure Arm based Instance.
+Continue the Learning Path to deploy Memcached as a cache for MySQL on a GCP Arm based Instance.
