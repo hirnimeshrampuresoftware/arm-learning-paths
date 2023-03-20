@@ -93,8 +93,6 @@ variable "resource_group_name_prefix" {
 
 Add the resources required to create a virtual machine in `main.tf`.
 
-Scroll down to see the information you need to change in `main.tf`.
-
 ```console
 resource "random_pet" "rg_name" {
   prefix = var.resource_group_name_prefix
