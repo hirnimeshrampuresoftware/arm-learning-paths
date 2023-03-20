@@ -22,13 +22,13 @@ You should have the prerequisite tools installed before starting the Learning Pa
 
 Any computer which has the required tools installed can be used for this section. The computer can be your desktop or laptop computer or a virtual machine with the required tools. 
 
-You will need an [an Azure portal account](https://azure.microsoft.com/en-in/get-started/azure-portal) to complete this Learning Path. Create an account if you don't have one.
+You will need an [Azure portal account](https://azure.microsoft.com/en-in/get-started/azure-portal) to complete this Learning Path. Create an account if you don't have one.
 
-Before you begin you will also need:
-- Login to Azure CLI
+Before you begin, you will also need:
+- Login to the Azure CLI
 - An SSH key pair
 
-The instructions to login to Azure CLI and to create the keys are below.
+The instructions to login to the Azure CLI and create the keys are below.
 
 ### Azure authentication
 
@@ -324,7 +324,7 @@ Apply complete! Resources: 16 added, 0 changed, 0 destroyed.
 
 ## Configure MySQL through Ansible
 
-Install MySQL and the required dependencies on both the inastances. 
+Install MySQL and the required dependencies on both the inastances.
 
 You can use the same `playbook.yaml` file used in the topic, [Deploy Memcached as a cache for MySQL on an AWS Arm based Instance](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#configure-mysql-through-ansible).
 
@@ -510,6 +510,7 @@ mysql> select * from book;
 ```
 
 4. Now connect to the second instance and repeat the above steps with a different data as shown below.
+
 The output will be:
 
 ```output
@@ -551,7 +552,7 @@ mysql> select * from movie;
 
 ## Deploy Memcached as a cache for MySQL using Python
 
-You will create two `.py` files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `mem.py`.  
+You will create two `.py` files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `memcached.py`.  
 
 `values.py` to store the IP addresses of the instances and the databases created in them.
 ```console
@@ -559,7 +560,7 @@ MYSQL_TEST=[["{{public_ip of MYSQL_TEST[0]}}", "arm_test1"],
 ["{{public_ip of MYSQL_TEST[1]}}", "arm_test2"]]
 ```
 Replace `{{public_ip of MYSQL_TEST[0]}}` & `{{public_ip of MYSQL_TEST[1]}}` with the public IPs generated in the `hosts` file after running the Terraform commands.       
-`mem.py` to access data from Memcached and, if not present, store it in the Memcached.       
+`memcached.py` to access data from Memcached and, if not present, store it in the Memcached.       
 ```console
 import sys
 import MySQLdb
@@ -632,7 +633,7 @@ Updated memcached with MySQL data
 ('Cmovie', '3')
 ```
 
-When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120 second expiry time), the data is loaded from Memcached and dumped.
+When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120-second expiry time), the data is loaded from Memcached and dumped.
 
 The output will be:
 ```output
@@ -653,12 +654,12 @@ Cmovie,3
 
 ### Memcached Telnet Commands
 
-Execute the steps below to verify that the MySQL query is getting stored in Memcached
-1. Connect to the Memcached server with Telnet and start a session:
+Execute the steps below to verify that the MySQL query is getting stored in Memcached.
+1. Connect to the Memcached server with Telnet and start a session.
 ```console
 telnet localhost 11211
 ```
-2. Retrieve data from Memcached through Telnet:
+2. Retrieve data from Memcached through Telnet.
 ```console
 get <key>
 ```
