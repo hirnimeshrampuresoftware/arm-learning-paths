@@ -12,7 +12,7 @@ layout: "learningpathall"
 
 You can deploy Memcached as a cache for MySQL on Google Cloud using Terraform and Ansible. 
 
-In this topic, you will deploy Memcached as a cache for MySQL on Google Cloud instance.
+In this section, you will deploy Memcached as a cache for MySQL on a Google Cloud instance.
 
 If you are new to Terraform, you should look at [Automate GCP instance creation using Terraform](/learning-paths/server-and-cloud/gcp/terraform/) before starting this Learning Path.
 
@@ -283,6 +283,6 @@ Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and
 
 The output will be:
 ```output
-
+```
 ## Deploy Memcached as a cache for MySQL using Python
 To deploy Memcached as a cache for MySQL using Python, follow this [documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#deploy-memcached-as-a-cache-for-mysql-using-python).
