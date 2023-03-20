@@ -283,6 +283,275 @@ Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and
 
 The output will be:
 ```output
+ubuntu@ip-172-31-38-39:~/gcp-mysql$ mysql -h 34.28.253.43 -u Local_user -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.32-0ubuntu0.22.04.2 (Ubuntu)
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
+
 ```
+### Access Database and Create Table
+
+1. You can access your database by using the below commands.
+
+```console
+show databases;
+```
+
+```console
+use {your_database};
+```
+
+The output will be:
+
+```output
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| arm_test1          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+mysql> use arm_test1;
+Database changed
+```
+
+2. Use the below commands to create a table and insert values into it.
+
+```console
+create table book(name char(10),id varchar(10));
+```
+```console
+insert into book(name,id) values ('Abook','10'),('Bbook','20'),('Cbook','20'),('Dbook','30'),('Ebook','45'),('Fbook','40'),('Gbook
+','69');
+```
+
+The output will be:
+
+```output
+mysql> create table book(name char(10),id varchar(10));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into book(name,id) values ('Abook','10'),('Bbook','20'),('Cbook','20'),('Dbook','30'),('Ebook','45'),('Fbook','40'),('Gbook
+    '> ','69');
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+```
+
+3. Use the below command to access the content of the table.
+
+```console
+select * from {{your_table_name}};
+```
+
+The output will be:
+
+```output
+mysql> select * from book;
++--------+------+
+| name   | id   |
++--------+------+
+| Abook  | 10   |
+| Bbook  | 20   |
+| Cbook  | 20   |
+| Dbook  | 30   |
+| Ebook  | 45   |
+| Fbook  | 40   |
+| Gbook
+ | 69   |
++--------+------+
+7 rows in set (0.00 sec)
+```
+
+4. Now connect to the second instance and repeat the above steps with a different data as shown below.           
+The output will be:
+
+```output
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| arm_test2          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use arm_test2;
+Database changed
+mysql> create table movie(name char(10),id varchar(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into movie(name,id) values ('Amovie','1'), ('Bmovie','2'), ('Cmovie','3'), ('Dmovie','4'), ('Emovie','5'), ('Fmovie','6'), ('Gmovie','7');
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from movie;
++--------+------+
+| name   | id   |
++--------+------+
+| Amovie | 1    |
+| Bmovie | 2    |
+| Cmovie | 3    |
+| Dmovie | 4    |
+| Emovie | 5    |
+| Fmovie | 6    |
+| Gmovie | 7    |
++--------+------+
+7 rows in set (0.00 sec)
+```
+
 ## Deploy Memcached as a cache for MySQL using Python
-To deploy Memcached as a cache for MySQL using Python, follow this [documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#deploy-memcached-as-a-cache-for-mysql-using-python).
+
+You will create two `.py` files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `memcached.py`.  
+
+`values.py` to store the IP addresses of the instances and the databases created in them.
+```console
+MYSQL_TEST=[["{{public_ip of MYSQL_TEST[0]}}", "arm_test1"],
+["{{public_ip of MYSQL_TEST[1]}}", "arm_test2"]]
+```
+Replace `{{public_ip of MYSQL_TEST[0]}}` & `{{public_ip of MYSQL_TEST[1]}}` with the public IPs generated in the `hosts` file after running the Terraform commands.       
+`memcached.py` to access data from Memcached and, if not present, store it in the Memcached.       
+```console
+import sys
+import MySQLdb
+import pymemcache
+from values import *
+from ast import literal_eval
+import argparse
+parser = argparse.ArgumentParser()
+
+parser.add_argument("-db", "--database", help="Database")
+parser.add_argument("-k", "--key", help="Key")
+parser.add_argument("-q", "--query", help="Query")
+args = parser.parse_args()
+
+memc = pymemcache.Client("127.0.0.1:11211");
+
+for i in range(0,2):
+    if (MYSQL_TEST[i][1]==args.database):
+        try:
+            conn = MySQLdb.connect (host = MYSQL_TEST[i][0],
+                                    user = "{{Your_database_user}}",
+                                    passwd = "{{Your_database_password}}",
+                                    db = MYSQL_TEST[i][1])
+        except MySQLdb.Error as e:
+             print ("Error %d: %s" % (e.args[0], e.args[1]))
+             sys.exit (1)
+
+        sqldata = memc.get(args.key)
+
+        if not sqldata:
+            cursor = conn.cursor()
+            cursor.execute(args.query)
+            rows = cursor.fetchall()
+            memc.set(args.key,rows,120)
+            print ("Updated memcached with MySQL data")
+            for x in rows:
+                print(x)
+        else:
+            print ("Loaded data from memcached")
+            data = tuple(literal_eval(sqldata.decode("utf-8")))
+            for row in data:
+                print (f"{row[0]},{row[1]}")
+        break
+else:
+    print("this database doesn't exist")            
+```
+Replace `{{Your_database_user}}` & `{{Your_database_password}}` with the database user and password created through Ansible-Playbook. Also change the `range` in `for loop` according to the number of instances created.
+
+To execute the script, run the following command:
+```console
+python3 memcached.py -db {database_name} -k {key} -q {query}
+```
+Replace `{database_name}` with the database you want to access, `{query}` with the query you want to run in the database and `{key}` with a variable to store the result of the query in Memcached.
+
+When the script is executed for the first time, the data is loaded from the MySQL database and stored on the Memcached server.
+
+The output will be:
+```output
+ubuntu@ip-172-31-38-39:~/gcp-mysql$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
+Updated memcached with MySQL data
+('Abook', '10')
+('Bbook', '20')
+('Cbook', '20')
+```
+```output
+ubuntu@ip-172-31-38-39:~/gcp-mysql$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
+Updated memcached with MySQL data
+('Amovie', '1')
+('Bmovie', '2')
+('Cmovie', '3')
+```
+
+When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120 second expiry time), the data is loaded from Memcached and dumped.
+
+The output will be:
+```output
+ubuntu@ip-172-31-38-39:~/gcp-mysql$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
+Loaded data from memcached
+Abook,10
+Bbook,20
+Cbook,20
+```
+```output
+ubuntu@ip-172-31-38-39:~/gcp-mysql$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
+Loaded data from memcached
+Amovie,1
+Bmovie,2
+Cmovie,3
+```
+
+### Memcached Telnet Commands
+
+Execute the steps below to verify that the MySQL query is getting stored in Memcached
+1. Connect to the Memcached server with Telnet and start a session:
+```console
+telnet localhost 11211
+```
+2. Retrieve data from Memcached through Telnet:
+```console
+get <key>
+```
+**NOTE:-** Key is the variable in which we store the data. In the above command, we are storing the data from the tables `book` and `movie` in `AA` and `BB` respectively.
+
+The output will be:
+
+```output
+ubuntu@ip-172-31-38-39:~/gcp-mysql$ telnet localhost 11211
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+get AA
+VALUE AA 0 51
+(('Abook', '10'), ('Bbook', '20'), ('Cbook', '20'))
+END
+get BB
+END
+```
+You have successfully deployed Memcached as a cache for MySQL on a GCP Arm based Instance.
+
+### Clean up resources
+
+Run `terraform destroy` to delete all resources created.
+
+```console
+terraform destroy
+```
