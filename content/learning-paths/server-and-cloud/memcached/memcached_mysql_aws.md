@@ -12,7 +12,7 @@ layout: "learningpathall"
 
 You can deploy Memcached as a cache for MySQL on an AWS Arm based Instance using Terraform and Ansible. 
 
-In this topic, you will deploy Memcached as a cache for MySQL on an AWS Instance, and in the next topic you will deploy Memcached as a cache for MySQL on an Azure Instance. 
+In this topic, you will deploy Memcached as a cache for MySQL on an AWS Instance. 
 
 If you are new to Terraform, you should look at [Automate AWS EC2 instance creation using Terraform](/learning-paths/server-and-cloud/aws/terraform/) before starting this Learning Path.
 
@@ -154,7 +154,7 @@ terraform init
     
 The output should be similar to:
 
-```console
+```output
 Initializing the backend...
 
 Initializing provider plugins...
@@ -196,7 +196,7 @@ Answer `yes` to the prompt to confirm you want to create AWS resources.
 
 The output should be similar to:
 
-```console
+```output
 Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
 ```
 
@@ -299,7 +299,7 @@ Deployment may take a few minutes.
 
 The output should be similar to:
 
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ ansible-playbook mysqlmodule.yml -i hosts --key-file ../.ssh/aws_key
 
 PLAY [mysql1, mysql2] ********************************************************************************************************************************************
@@ -371,7 +371,7 @@ mysql -h {public_ip of instance where Mysql deployed} -P3306 -u {user of databas
 Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and `{password of database}` with your values. In this example, `user`= `Local_user`, which is getting created in the `playbook.yaml` file. 
 
 The output will be:
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ mysql -h 13.59.220.179 -P3306 -u Local_user -p
 Enter password:
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -403,7 +403,7 @@ use {your_database};
 
 The output will be:
 
-```console
+```output
 mysql> show databases;
 +--------------------+
 | Database           |
@@ -431,7 +431,7 @@ insert into book(name,id) values ('Abook','10'),('Bbook','20'),('Cbook','20'),('
 
 The output will be:
 
-```console
+```output
 mysql> create table book(name char(10),id varchar(10));
 Query OK, 0 rows affected (0.03 sec)
 
@@ -450,7 +450,7 @@ select * from {{your_table_name}};
 
 The output will be:
 
-```console
+```output
 mysql> select * from book
     -> ;
 +--------+------+
@@ -468,10 +468,10 @@ mysql> select * from book
 7 rows in set (0.00 sec)
 ```
 
-4. Now connect to the second instance and repeat the above steps with a different data as shown below.
+4. Now connect to the second instance and repeat the above steps with a different data as shown below.           
 The output will be:
 
-```console
+```output
 mysql> show databases;
 +--------------------+
 | Database           |
@@ -576,14 +576,14 @@ Replace `{database_name}` with the database you want to access, `{query}` with t
 When the script is executed for the first time, the data is loaded from the MySQL database and stored on the Memcached server.
 
 The output will be:
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
 Updated memcached with MySQL data
 ('Abook', '10')
 ('Bbook', '20')
 ('Cbook', '20')
 ```
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
 Updated memcached with MySQL data
 ('Amovie', '1')
@@ -594,7 +594,7 @@ Updated memcached with MySQL data
 When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120 second expiry time), the data is loaded from Memcached and dumped.
 
 The output will be:
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
 Loaded data from memcached
 Abook,10
@@ -602,7 +602,7 @@ Bbook,20
 Cbook,20
 ```
 
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
 Loaded data from memcached
 Amovie,1
@@ -625,7 +625,7 @@ get <key>
 
 The output will be:
 
-```console
+```output
 ubuntu@ip-172-31-38-39:~/mysql_final$ telnet localhost 11211
 Trying 127.0.0.1...
 Connected to localhost.
