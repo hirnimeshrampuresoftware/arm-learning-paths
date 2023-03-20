@@ -24,7 +24,7 @@ Any computer which has the required tools installed can be used for this section
 
 You will need an [AWS account](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start) to complete this Learning Path. Create an account if you don't have one.
 
-Before you begin you will also need:
+Before you begin, you will also need:
 - An AWS access key ID and secret access key. 
 - An SSH key pair
 
@@ -38,7 +38,7 @@ To generate an access key and secret access key, follow the [steps from the Terr
 
 ### Generate an SSH key-pair
 
-Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access: 
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access.
 
 ```console
 ssh-keygen -f aws_key -t rsa -b 2048 -P ""
@@ -48,7 +48,7 @@ You should now have your AWS access keys and your SSH keys in the current direct
 
 ## Create an AWS EC2 instance using Terraform
 
-Using a text editor, save the code below to in a file called `main.tf`.
+Using a text editor, save the code below in a file called `main.tf`.
     
 ```console
 provider "aws" {
@@ -129,10 +129,10 @@ Make the changes listed below in `main.tf` to match your account settings.
 2. (optional) In the `aws_instance` section, change the ami value to your preferred Linux distribution. The AMI ID for Ubuntu 22.04 on Arm is `ami-0ca2eafa23bc3dd01`. No change is needed if you want to use Ubuntu AMI. 
 
 {{% notice Note %}}
-The instance type is t4g.small. This an an Arm-based instance and requires an Arm Linux distribution.
+The instance type is t4g.small. This is an Arm-based instance and requires an Arm Linux distribution.
 {{% /notice %}}
 
-3. In the `aws_key_pair` section, change the `public_key` value to match your SSH key. Copy and paste the contents of your `aws_key.pub` file to the `public_key` string. Make sure the string is a single line in the text file.
+3. In the `aws_key_pair` section, change the `public_key` value to match your SSH key. Copy and paste the contents of your `aws_key.pub` file into the `public_key` string. Make sure the string is a single line in the text file.
 
 4. In the `local_file` section, change the `filename` to be the path to your current directory.
 
@@ -190,7 +190,7 @@ Run `terraform apply` to apply the execution plan and create all AWS resources.
 terraform apply
 ```      
 
-Answer `yes` to the prompt to confirm you want to create AWS resources. 
+Answer `yes` to the prompt to confirm you want to create AWS resources.
 
 The output should be similar to:
 
@@ -200,9 +200,9 @@ Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
 
 ## Configure MySQL through Ansible
 
-Install MySQL and the required dependencies. 
+Install MySQL and the required dependencies.
 
-Using a text editor, save the code below to in a file called `playbook.yaml`. This Playbook installs & enables MySQL in the instances and creates databases inside them.
+Using a text editor, save the code below in a file called `playbook.yaml`. This Playbook installs & enables MySQL in the instances and creates databases inside them.
 
 ```console
 ---
@@ -466,7 +466,8 @@ mysql> select * from book
 7 rows in set (0.00 sec)
 ```
 
-4. Now connect to the second instance and repeat the above steps with a different data as shown below.           
+4. Now connect to the second instance and repeat the above steps with a different data as shown below.    
+       
 The output will be:
 
 ```output
@@ -508,7 +509,7 @@ mysql> select * from movie;
 
 ## Deploy Memcached as a cache for MySQL using Python
 
-You will create two `.py` files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `mem.py`.  
+You will create two `.py` files on the host machine to deploy Memcached as a MySQL cache using Python: `values.py` and `memcached.py`.  
 
 `values.py` to store the IP addresses of the instances and the databases created in them.
 ```console
@@ -516,7 +517,7 @@ MYSQL_TEST=[["{{public_ip of MYSQL_TEST[0]}}", "arm_test1"],
 ["{{public_ip of MYSQL_TEST[1]}}", "arm_test2"]]
 ```
 Replace `{{public_ip of MYSQL_TEST[0]}}` & `{{public_ip of MYSQL_TEST[1]}}` with the public IPs generated in the `hosts` file after running the Terraform commands.       
-`mem.py` to access data from Memcached and, if not present, store it in the Memcached.       
+`memcached.py` to access data from Memcached and, if not present, store it in the Memcached.       
 ```console
 import sys
 import MySQLdb
@@ -569,7 +570,7 @@ To execute the script, run the following command:
 ```console
 python3 mem.py -db {database_name} -k {key} -q {query}
 ```
-Replace `{database_name}` with the database you want to access, `{query}` with the query you want to run in the database and `{key}` with a variable to store the result of the query in Memcached.
+Replace `{database_name}` with the database you want to access, `{query}` with the query you want to run in the database, and `{key}` with a variable to store the result of the query in Memcached.
 
 When the script is executed for the first time, the data is loaded from the MySQL database and stored on the Memcached server.
 
@@ -589,7 +590,7 @@ Updated memcached with MySQL data
 ('Cmovie', '3')
 ```
 
-When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120 second expiry time), the data is loaded from Memcached and dumped.
+When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120-second expiry time), the data is loaded from Memcached and dumped.
 
 The output will be:
 ```output
@@ -610,7 +611,7 @@ Cmovie,3
 
 ### Memcached Telnet Commands
 
-Execute the steps below to verify that the MySQL query is getting stored in Memcached
+Execute the steps below to verify that the MySQL query is getting stored in Memcached.
 1. Connect to the Memcached server with Telnet and start a session:
 ```console
 telnet localhost 11211
