@@ -12,7 +12,7 @@ layout: "learningpathall"
 
 You can deploy Memcached as a cache for MySQL on Azure using Terraform and Ansible. 
 
-In this topic, you will deploy Memcached as a cache for MySQL on an Azure instance. 
+In this section, you will deploy Memcached as a cache for MySQL on an Azure instance. 
 
 If you are new to Terraform, you should look at [Automate Azure instance creation using Terraform](/learning-paths/server-and-cloud/azure/terraform/) before starting this Learning Path.
 
@@ -681,7 +681,7 @@ VALUE BB 0 51
 END
 ```
 
-You have successfully deployed Memcached as a cache for MySQL on an AWS Arm based Instance.
+You have successfully deployed Memcached as a cache for MySQL on an Azure Arm based Instance.
 
 ### Clean up resources
 
