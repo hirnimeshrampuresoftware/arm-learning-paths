@@ -57,11 +57,6 @@ provider "google" {
   zone = "us-central1-a"
 }
 
-resource "google_compute_project_metadata_item" "ssh-keys" {
-  key   = "ssh-keys"
-  value = "ubuntu:${file("public_key_location")}"
-}
-
 resource "google_compute_instance" "MYSQL_TEST" {
   name         = "mysqltest-${count.index+1}"
   count        = "2"
@@ -79,6 +74,9 @@ resource "google_compute_instance" "MYSQL_TEST" {
       // Ephemeral public IP
     }
   }
+  metadata = {
+     ssh-keys = "ubuntu:${file("public_key_location")}"
+  }  
 }
 resource "google_compute_firewall" "default" {
   name    = "test-firewall"
@@ -137,7 +135,7 @@ terraform init
     
 The output should be similar to:
 
-```console
+```output
 Initializing the backend...
 
 Initializing provider plugins...
@@ -185,12 +183,106 @@ terraform apply
 
 Answer `yes` to the prompt to confirm you want to create GCP resources. 
 
-```console
+The output should be similar to:
+
+```output
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 
 ```
 
 ## Configure MySQL through Ansible
-An Ansible Playbook installs & enables MySQL in the instances and creates databases & tables inside them. To configure MySQL through Ansible and run the Playbook, follow this [documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#configure-mysql-through-ansible).
+
+Install MySQL and the required dependencies on both the inastances. 
+
+You can use the same `playbook.yaml` file used in the topic, [Deploy Memcached as a cache for MySQL on an AWS Arm based Instance](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#configure-mysql-through-ansible).
+
+### Ansible Commands
+
+Substitute your private key name, and run the playbook using the  `ansible-playbook` command:
+
+```console
+ansible-playbook playbook.yaml -i hosts --key-file gcp_key
+```
+
+Answer `yes` when prompted for the SSH connection. 
+
+Deployment may take a few minutes. 
+
+The output should be similar to:
+
+```output
+ubuntu@ip-172-31-38-39:~/gcp-mysql$ ansible-playbook playbook.yaml -i hosts --key-file gcp_key
+
+PLAY [mysql1, mysql2] ********************************************************************************************************************************************
+
+TASK [Gathering Facts] *******************************************************************************************************************************************
+The authenticity of host '34.28.237.71 (34.28.237.71)' can't be established.
+ED25519 key fingerprint is SHA256:xOr4xr3TvaRdPxX4QlxhYpjf9mykgmhAtWElxkhqK3w.
+This key is not known by any other names
+The authenticity of host '35.222.119.249 (35.222.119.249)' can't be established.
+ED25519 key fingerprint is SHA256:gHsDuIJ9IVFrOeeYUZXMEvFOu5tXL0ZB78aHwZjooTI.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+yes
+ok: [34.28.237.71]
+ok: [35.222.119.249]
+
+TASK [Update the Machine and Install dependencies] ***************************************************************************************************************
+changed: [35.222.119.249]
+changed: [34.28.237.71]
+
+TASK [start and enable mysql service] ****************************************************************************************************************************
+ok: [34.28.237.71]
+ok: [35.222.119.249]
+
+TASK [Change Root Password] **************************************************************************************************************************************
+changed: [34.28.237.71]
+changed: [35.222.119.249]
+
+TASK [Create database user with password and all database privileges and 'WITH GRANT OPTION'] ********************************************************************
+changed: [34.28.237.71]
+changed: [35.222.119.249]
+
+TASK [Create a new database with name 'arm_test1'] ***************************************************************************************************************
+skipping: [35.222.119.249]
+changed: [34.28.237.71]
+
+TASK [Create a new database with name 'arm_test2'] ***************************************************************************************************************
+skipping: [34.28.237.71]
+changed: [35.222.119.249]
+
+TASK [MySQL secure installation] *********************************************************************************************************************************
+changed: [35.222.119.249]
+changed: [34.28.237.71]
+
+TASK [Enable remote login by changing bind-address] **************************************************************************************************************
+changed: [34.28.237.71]
+changed: [35.222.119.249]
+
+RUNNING HANDLER [Restart mysql] **********************************************************************************************************************************
+changed: [35.222.119.249]
+changed: [34.28.237.71]
+
+PLAY RECAP *******************************************************************************************************************************************************
+34.28.237.71               : ok=9    changed=7    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
+35.222.119.249             : ok=9    changed=7    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
+```
+
+## Connect to Database from local machine
+
+To connect to the database, you need the `public-ip` of the instance where MySQL is deployed. You also need to use the MySQL Client to interact with the MySQL database.
+
+```console
+apt install mysql-client
+```
+
+```console
+mysql -h {public_ip of instance where Mysql deployed} -P3306 -u {user of database} -p{password of database}
+```
+Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and `{password of database}` with your values. In this example, `user`= `Local_user`, which is getting created in the `playbook.yaml` file. 
+
+The output will be:
+```output
 
 ## Deploy Memcached as a cache for MySQL using Python
 To deploy Memcached as a cache for MySQL using Python, follow this [documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#deploy-memcached-as-a-cache-for-mysql-using-python).
