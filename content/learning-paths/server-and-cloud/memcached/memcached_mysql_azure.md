@@ -618,14 +618,14 @@ When the script is executed for the first time, the data is loaded from the MySQ
 
 The output will be:
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
+ubuntu@ip-172-31-38-39:~/azure-mysql$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
 Updated memcached with MySQL data
 ('Abook', '10')
 ('Bbook', '20')
 ('Cbook', '20')
 ```
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
+ubuntu@ip-172-31-38-39:~/azure-mysql$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
 Updated memcached with MySQL data
 ('Amovie', '1')
 ('Bmovie', '2')
@@ -636,7 +636,7 @@ When executed after that, it loads the data from Memcached. In the example above
 
 The output will be:
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
+ubuntu@ip-172-31-38-39:~/azure-mysql$ python3 memcached.py -db arm_test1 -k AA -q "select * from book limit 3"
 Loaded data from memcached
 Abook,10
 Bbook,20
@@ -644,7 +644,7 @@ Cbook,20
 ```
 
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
+ubuntu@ip-172-31-38-39:~/azure-mysql$ python3 memcached.py -db arm_test2 -k BB -q "select * from movie limit 3"
 Loaded data from memcached
 Amovie,1
 Bmovie,2
@@ -667,7 +667,7 @@ get <key>
 The output will be:
 
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ telnet localhost 11211
+ubuntu@ip-172-31-38-39:~/azure-mysql$ telnet localhost 11211
 Trying 127.0.0.1...
 Connected to localhost.
 Escape character is '^]'.
