@@ -22,13 +22,13 @@ You should have the prerequisite tools installed before starting the Learning Pa
 
 Any computer which has the required tools installed can be used for this section. The computer can be your desktop or laptop computer or a virtual machine with the required tools. 
 
-You will need an [Google Cloud account](https://console.cloud.google.com/?hl=en-au) to complete this Learning Path. Create an account if you don't have one.
+You will need a [Google Cloud account](https://console.cloud.google.com/?hl=en-au) to complete this Learning Path. Create an account if you don't have one.
 
 Before you begin you will also need:
-- Login to Google Cloud CLI 
+- Login to the Google Cloud CLI 
 - An SSH key pair
 
-The instructions to login to Google Cloud CLI and to create the keys are below.
+The instructions to login to the Google Cloud CLI and create the keys are below.
 
 ### Acquire user credentials
 
@@ -47,8 +47,6 @@ You should now have your SSH keys in the current directory.
 ## Create GCP instances using Terraform
 
 Using a text editor, save the code below in a file called `main.tf`. Here we are creating 2 instances.
-
-Scroll down to see the information you need to change in `main.tf`.
     
 ```console
 provider "google" {
@@ -127,7 +125,7 @@ Use Terraform to deploy the `main.tf` file.
 
 ### Initialize Terraform
 
-Run `terraform init` to initialize the Terraform deployment. This command downloads the dependencies required for Google Cloud.
+Run `terraform init` to initialize the Terraform deployment. This command downloads the dependencies required for GCP.
 
 ```console
 terraform init
@@ -198,7 +196,7 @@ You can use the same `playbook.yaml` file used in the topic, [Deploy Memcached a
 
 ### Ansible Commands
 
-Substitute your private key name, and run the playbook using the  `ansible-playbook` command:
+Substitute your private key name, and run the playbook using the `ansible-playbook` command:
 
 ```console
 ansible-playbook playbook.yaml -i hosts --key-file gcp_key
@@ -378,7 +376,8 @@ mysql> select * from book;
 7 rows in set (0.00 sec)
 ```
 
-4. Now connect to the second instance and repeat the above steps with a different data as shown below.           
+4. Now connect to the second instance and repeat the above steps with a different data as shown below.
+      
 The output will be:
 
 ```output
@@ -501,7 +500,7 @@ Updated memcached with MySQL data
 ('Cmovie', '3')
 ```
 
-When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120 second expiry time), the data is loaded from Memcached and dumped.
+When executed after that, it loads the data from Memcached. In the example above, the information stored in Memcached is in the form of rows from a Python DB cursor. When accessing the information (within the 120-second expiry time), the data is loaded from Memcached and dumped.
 
 The output will be:
 ```output
@@ -521,12 +520,12 @@ Cmovie,3
 
 ### Memcached Telnet Commands
 
-Execute the steps below to verify that the MySQL query is getting stored in Memcached
-1. Connect to the Memcached server with Telnet and start a session:
+Execute the steps below to verify that the MySQL query is getting stored in Memcached.
+1. Connect to the Memcached server with Telnet and start a session.
 ```console
 telnet localhost 11211
 ```
-2. Retrieve data from Memcached through Telnet:
+2. Retrieve data from Memcached through Telnet.
 ```console
 get <key>
 ```
@@ -546,7 +545,7 @@ END
 get BB
 END
 ```
-You have successfully deployed Memcached as a cache for MySQL on a GCP Arm based Instance.
+You have successfully deployed Memcached as a cache for MySQL on a Google Cloud Arm based Instance.
 
 ### Clean up resources
 
