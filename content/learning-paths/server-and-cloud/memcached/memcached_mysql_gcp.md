@@ -76,20 +76,22 @@ resource "google_compute_instance" "MYSQL_TEST" {
      ssh-keys = "ubuntu:${file("public_key_location")}"
   }  
 }
-resource "google_compute_firewall" "default" {
-  name    = "test-firewall"
-  network = google_compute_network.default.name
+
+resource "google_compute_firewall" "rules" {
+  project     = "{project_id}"
+  name        = "my-firewall-rule"
+  network     = "default"
+  description = "Open ssh connection and mysql port"
+  source_ranges = ["0.0.0.0/0"]
 
   allow {
     protocol = "icmp"
   }
 
   allow {
-    protocol = "tcp"
-    ports    = ["22", "3306"]
+    protocol  = "tcp"
+    ports     = ["22", "3306"]
   }
-
-  source_tags = ["web"]
 }
 
 resource "google_compute_network" "default" {
