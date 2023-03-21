@@ -36,7 +36,7 @@ The installation of Terraform on your Desktop/Laptop needs to communicate with A
 
 For authentication, follow the [steps from the Terraform Learning Path](/learning-paths/server-and-cloud/azure/terraform#azure-authentication).
 
-## Generate an SSH key-pair
+### Generate an SSH key-pair
 
 Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
 documentation](/install-guides/ssh#ssh-keys).
