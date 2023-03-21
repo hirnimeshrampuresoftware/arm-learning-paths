@@ -34,7 +34,7 @@ The instructions to login to the Google Cloud CLI and create the keys are below.
 
 To obtain user access credentials, follow the [steps from the Terraform Learning Path](/learning-paths/server-and-cloud/gcp/terraform#acquire-user-credentials).
 
-## Generate an SSH key-pair
+### Generate an SSH key-pair
 
 Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
 documentation](/install-guides/ssh#ssh-keys).
