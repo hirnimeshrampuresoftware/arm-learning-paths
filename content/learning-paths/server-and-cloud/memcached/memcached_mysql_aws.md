@@ -30,21 +30,16 @@ Before you begin, you will also need:
 
 The instructions to create the keys are below.
 
+### Generate an SSH key-pair
+
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
+documentation](/install-guides/ssh#ssh-keys).
+
 ### Generate AWS access keys 
 
 Terraform requires AWS authentication to create AWS resources. You can generate access keys (access key ID and secret access key) to perform authentication. Terraform uses the access keys to make calls to AWS using the AWS CLI. 
 
 To generate an access key and secret access key, follow the [steps from the Terraform Learning Path](/learning-paths/server-and-cloud/aws-terraform/terraform#generate-access-keys-access-key-id-and-secret-access-key).
-
-### Generate an SSH key-pair
-
-Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access.
-
-```console
-ssh-keygen -f aws_key -t rsa -b 2048 -P ""
-```
-
-You should now have your AWS access keys and your SSH keys in the current directory.
 
 ## Create an AWS EC2 instance using Terraform
 
@@ -61,7 +56,7 @@ provider "aws" {
   ami           = "ami-0ca2eafa23bc3dd01"
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity1.name]
-  key_name = "aws_key"
+  key_name = "id_rsa"
   tags = {
     Name = "MYSQL_TEST"
   }
@@ -117,7 +112,7 @@ ansible_user=ubuntu
 }
 
 resource "aws_key_pair" "deployer" {
-        key_name   = "aws_key"
+        key_name   = "id_rsa"
         public_key = "ssh-rsaxxxxxxxxxxxxxxx"
 } 
     
@@ -132,7 +127,7 @@ Make the changes listed below in `main.tf` to match your account settings.
 The instance type is t4g.small. This is an Arm-based instance and requires an Arm Linux distribution.
 {{% /notice %}}
 
-3. In the `aws_key_pair` section, change the `public_key` value to match your SSH key. Copy and paste the contents of your `aws_key.pub` file into the `public_key` string. Make sure the string is a single line in the text file.
+3. In the `aws_key_pair` section, change the `public_key` value to match your SSH key. Copy and paste the contents of your `id_rsa.pub` file into the `public_key` string. Make sure the string is a single line in the text file.
 
 4. In the `local_file` section, change the `filename` to be the path to your current directory.
 
@@ -288,7 +283,7 @@ Replace `{{Your_mysql_password}}` and `{{Give_any_password}}` in this file with 
 Substitute your private key name, and run the playbook using the  `ansible-playbook` command:
 
 ```console
-ansible-playbook playbook.yaml -i hosts --key-file aws_key
+ansible-playbook playbook.yaml -i hosts --key-file ~/.ssh/id_rsa
 ```
 
 Answer `yes` when prompted for the SSH connection. 
@@ -298,7 +293,7 @@ Deployment may take a few minutes.
 The output should be similar to:
 
 ```output
-ubuntu@ip-172-31-38-39:~/aws-mysql$ ansible-playbook mysqlmodule.yml -i hosts --key-file ../.ssh/aws_key
+ubuntu@ip-172-31-38-39:~/aws-mysql$ ansible-playbook mysqlmodule.yml -i hosts --key-file ~/.ssh/id_rsa
 
 PLAY [mysql1, mysql2] ********************************************************************************************************************************************
 
