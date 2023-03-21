@@ -36,15 +36,10 @@ The installation of Terraform on your Desktop/Laptop needs to communicate with A
 
 For authentication, follow the [steps from the Terraform Learning Path](/learning-paths/server-and-cloud/azure/terraform#azure-authentication).
 
-### Generate an SSH key-pair
+## Generate an SSH key-pair
 
-Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for Azure access. 
-
-```console
-ssh-keygen -f azure_key -t rsa -b 2048 -P ""
-```
-
-You should now have your SSH keys in the current directory.
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
+documentation](/install-guides/ssh#ssh-keys).
 
 ## Create Azure instances using Terraform
 
@@ -227,7 +222,7 @@ resource "azurerm_linux_virtual_machine" "MYSQL_TEST" {
 
   admin_ssh_key {
     username= "ubuntu"
-    public_key = file("/path/to/public_key/azure_key.pub")
+    public_key = file("/path/to/public_key/id_rsa.pub")
   }
 
   boot_diagnostics {
@@ -331,7 +326,7 @@ You can use the same `playbook.yaml` file used in the topic, [Deploy Memcached a
 Substitute your private key name, and run the playbook using the  `ansible-playbook` command:
 
 ```console
-ansible-playbook playbook.yaml -i hosts --key-file azure_key
+ansible-playbook playbook.yaml -i hosts --key-file ~/.ssh/id_rsa
 ```
 
 Answer `yes` when prompted for the SSH connection. 
@@ -341,7 +336,7 @@ Deployment may take a few minutes.
 The output should be similar to:
 
 ```output
-ubuntu@ip-172-31-38-39:~/azure-mysql$ ansible-playbook playbook.yaml -i hosts --key-file azure_key
+ubuntu@ip-172-31-38-39:~/azure-mysql$ ansible-playbook playbook.yaml -i hosts --key-file ~/.ssh/id_rsa
 
 PLAY [mysql1, mysql2] ********************************************************************************************************************************************
 
