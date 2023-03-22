@@ -39,6 +39,8 @@ To obtain user access credentials, follow the [steps from the Terraform Learning
 Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
 documentation](/install-guides/ssh#ssh-keys).
 
+{{% notice Note %}} If you already have the SSH key-pair present in the `~/.ssh` directory, you can skip this step. {{% /notice %}}
+
 ## Create GCP instances using Terraform
 
 Using a text editor, save the code below in a file called `main.tf`. Here we are creating 2 instances.
@@ -68,7 +70,7 @@ resource "google_compute_instance" "MYSQL_TEST" {
     }
   }
   metadata = {
-     ssh-keys = "ubuntu:${file("public_key_location")}"
+     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }  
 }
 
@@ -110,9 +112,7 @@ Make the changes listed below in `main.tf` to match your account settings.
 
 1. In the `provider` section, update the `project_id` with your value.
 
-2. In the `google_compute_project_metadata_item` section, change the `public_key_location` value to match your SSH key.
-
-3. In the `local_file` section, change the `filename` to be the path to your current directory.
+2. In the `local_file` section, change the `filename` to be the path to your current directory.
 
 The hosts file is automatically generated and does not need to be changed, change the path to the location of the hosts file.
 
