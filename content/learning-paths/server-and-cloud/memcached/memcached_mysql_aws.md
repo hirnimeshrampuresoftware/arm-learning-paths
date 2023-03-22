@@ -36,7 +36,7 @@ Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for
 documentation](/install-guides/ssh#ssh-keys).
 
 {{% notice Note %}}
-If you already have the SSH key-pair present in the `~/.ssh` directory, you can skip this step.
+If you already have an SSH key-pair present in the `~/.ssh` directory, you can skip this step.
 {{% /notice %}}
 
 
