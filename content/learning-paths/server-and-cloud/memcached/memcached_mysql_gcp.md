@@ -267,11 +267,11 @@ PLAY RECAP *********************************************************************
 
 ## Connect to Database from local machine
 
-Follow the instructions given in [AWS documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#connect-to-database-from-local-machine) to connect to the database from local machine.
+Follow the instructions given in the [AWS documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#connect-to-database-from-local-machine) to connect to the database from local machine.
 
 ## Deploy Memcached as a cache for MySQL using Python
 
-Follow the instructions given in [AWS documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#deploy-memcached-as-a-cache-for-mysql-using-python) to deploy Memcached as a cache for MySQL using Python.
+Follow the instructions given in the [AWS documentation](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#deploy-memcached-as-a-cache-for-mysql-using-python) to deploy Memcached as a cache for MySQL using Python.
 
 You have successfully deployed Memcached as a cache for MySQL on a Google Cloud Arm based Instance.
 
