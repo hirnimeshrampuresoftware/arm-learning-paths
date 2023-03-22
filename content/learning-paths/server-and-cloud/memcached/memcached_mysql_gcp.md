@@ -112,7 +112,7 @@ ansible_user=ubuntu
 ```
 Make the changes listed below in `main.tf` to match your account settings.
 
-1. In the `provider` section, update the `project_id` with your value.
+1. In the `provider` and `google_compute_firewall` sections, update the `project_id` with your value.
 
 2. In the `local_file` section, change the `filename` to be the path to your current directory.
 
