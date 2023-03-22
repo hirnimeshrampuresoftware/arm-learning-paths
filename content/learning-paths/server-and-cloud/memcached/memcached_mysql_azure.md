@@ -41,7 +41,7 @@ For authentication, follow the [steps from the Terraform Learning Path](/learnin
 Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
 documentation](/install-guides/ssh#ssh-keys).
 
-{{% notice Note %}} If you already have the SSH key-pair present in the ~/.ssh directory, you can skip this step. {{% /notice %}}
+{{% notice Note %}} If you already have the SSH key-pair present in the `~/.ssh` directory, you can skip this step. {{% /notice %}}
 
 ## Create Azure instances using Terraform
 
