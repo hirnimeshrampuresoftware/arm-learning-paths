@@ -35,6 +35,11 @@ The instructions to create the keys are below.
 Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
 documentation](/install-guides/ssh#ssh-keys).
 
+{{% notice Note %}}
+If you already have the SSH key-pair present in the `~/.ssh` directory, you can skip this step.
+{{% /notice %}}
+
+
 ### Generate AWS access keys 
 
 Terraform requires AWS authentication to create AWS resources. You can generate access keys (access key ID and secret access key) to perform authentication. Terraform uses the access keys to make calls to AWS using the AWS CLI. 
@@ -113,7 +118,7 @@ ansible_user=ubuntu
 
 resource "aws_key_pair" "deployer" {
         key_name   = "id_rsa"
-        public_key = "ssh-rsaxxxxxxxxxxxxxxx"
+        public_key = "file("~/.ssh/id_rsa.pub")"
 } 
     
 ```
@@ -127,9 +132,7 @@ Make the changes listed below in `main.tf` to match your account settings.
 The instance type is t4g.small. This is an Arm-based instance and requires an Arm Linux distribution.
 {{% /notice %}}
 
-3. In the `aws_key_pair` section, change the `public_key` value to match your SSH key. Copy and paste the contents of your `id_rsa.pub` file into the `public_key` string. Make sure the string is a single line in the text file.
-
-4. In the `local_file` section, change the `filename` to be the path to your current directory.
+3. In the `local_file` section, change the `filename` to be the path to your current directory.
 
 The hosts file is automatically generated and does not need to be changed, change the path to the location of the hosts file.
 
