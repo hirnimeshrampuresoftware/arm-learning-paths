@@ -36,7 +36,7 @@ To obtain user access credentials, follow the [steps from the Terraform Learning
 
 ### Generate an SSH key-pair
 
-Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for AWS EC2 access. To generate the key-pair, follow this [
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for GCP access. To generate the key-pair, follow this [
 documentation](/install-guides/ssh#ssh-keys).
 
 {{% notice Note %}} 
