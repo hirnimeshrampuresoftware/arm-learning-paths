@@ -38,7 +38,7 @@ For authentication, follow the [steps from the Terraform Learning Path](/learnin
 
 ### Generate an SSH key-pair
 
-Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for Azure access. To generate the key-pair, follow this [
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for Azure instance access. To generate the key-pair, follow this [
 documentation](/install-guides/ssh#ssh-keys).
 
 {{% notice Note %}} 
