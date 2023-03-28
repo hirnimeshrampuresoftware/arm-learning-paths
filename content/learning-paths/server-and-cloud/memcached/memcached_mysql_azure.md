@@ -235,7 +235,7 @@ resource "azurerm_linux_virtual_machine" "MYSQL_TEST" {
 }
 resource "local_file" "inventory" {
     depends_on=[azurerm_linux_virtual_machine.MYSQL_TEST]
-    filename = "(your_current_directory)/hosts"
+    filename = "/tmp/inventory"
     content = <<EOF
 [mysql1]
 ${azurerm_linux_virtual_machine.MYSQL_TEST[0].public_ip_address}
@@ -247,9 +247,8 @@ ansible_user=ubuntu
                 EOF
 }
 ```
-In the `local_file` section, change the `filename` to be the path to your current directory.
 
-The hosts file is automatically generated and does not need to be changed, change the path to the location of the hosts file.
+The inventory file is automatically generated and does not need to be changed.
 
 ## Terraform Commands
 
@@ -326,7 +325,7 @@ You can use the same `playbook.yaml` file used in the section, [Deploy Memcached
 Substitute your private key name, and run the playbook using the  `ansible-playbook` command:
 
 ```console
-ansible-playbook playbook.yaml -i hosts --key-file ~/.ssh/id_rsa
+ansible-playbook playbook.yaml -i /tmp/inventory --key-file ~/.ssh/id_rsa
 ```
 
 Answer `yes` when prompted for the SSH connection. 
@@ -336,7 +335,7 @@ Deployment may take a few minutes.
 The output should be similar to:
 
 ```output
-ubuntu@ip-172-31-38-39:~/azure-mysql$ ansible-playbook playbook.yaml -i hosts --key-file ~/.ssh/id_rsa
+ubuntu@ip-172-31-38-39:~/azure-mysql$ ansible-playbook playbook.yaml -i /tmp/inventory --key-file ~/.ssh/id_rsa
 
 PLAY [mysql1, mysql2] ********************************************************************************************************************************************
 
