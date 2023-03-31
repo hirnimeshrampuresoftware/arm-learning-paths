@@ -6,11 +6,13 @@ title: Arm Virtual Hardware
 ### Optional additional search terms (one per line) to assist in finding the article
 additional_search_terms:
 - CI/CD
-- virtual platforms
+- virtual platform
 - FVP
 
 ### Estimated completion time in minutes (please use integer multiple of 5)
 minutes_to_complete: 15
+
+author_primary: Ronan Synnott
 
 ### Link to official documentation
 official_docs: https://arm-software.github.io/AVH/main/overview/html/index.html

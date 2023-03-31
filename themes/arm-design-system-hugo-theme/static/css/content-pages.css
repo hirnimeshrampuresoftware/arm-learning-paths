@@ -59,6 +59,10 @@ html[theme='dark'] .tab-right-card > h6 {
     color: white;
 }
 
+.tab-right-card-header {
+    margin: 10px;
+    font-size:1em;
+}
 
 
 
@@ -85,9 +89,14 @@ p.github-link        {
     margin-top: 0px;
     margin-bottom: 0px;
 
-    color: var(--arm-blue);
+    color: var(--arm-web-safe-blue);
     text-decoration: none;
 }
+
+html[theme='dark'] p.github-link        { 
+    color: var(--arm-light-blue);
+}
+
 
 div.github-div {
     padding-left: 16px;
@@ -105,4 +114,86 @@ div.github-div {
 
 html[theme='dark'] div.github-div {
     border-color: var(--arm-color-overlay-light);
+}
+
+p.github-link:hover {
+    color: var(--arm-web-safe-orange);
+}
+html[theme='dark'] p.github-link:hover {
+    color: var(--arm-orange);
+}
+
+
+/* Multi-tool page styling (like for docker)
+*******************************************************************/   
+.multi-tool-selection-title {
+    color: var(--arm-web-safe-blue);
+
+    margin-top: 4px!important;
+    margin-bottom: 4px!important;
+}
+html[theme='dark'] .multi-tool-selection-title {
+    color: var(--arm-light-blue);
+}
+ads-card.path-card:hover .multi-tool-selection-title{
+    transition: color 0.3s ease-in-out;
+    color: var(--arm-web-safe-orange);
+}
+html[theme='dark'] ads-card.path-card:hover .multi-tool-selection-title {
+    transition: color 0.3s ease-in-out;
+    color: var(--arm-orange);
+}
+
+
+
+
+/* Review page styling
+*******************************************************************/   
+.fa-circle-check {color: var(--arm-web-safe-green);}
+.correct-explain {color: var(--arm-web-safe-green);}
+html[theme='dark'] .fa-circle-check {color: var(--arm-green);}
+html[theme='dark'] .correct-explain {color: var(--arm-green);}
+
+
+.fa-times-circle   {color: var(--arm-web-safe-red);}
+.incorrect-explain {color: var(--arm-web-safe-red);}
+html[theme='dark'] .fa-times-circle {color: #e86868} /* 27% lighter than arm's websafe red */
+html[theme='dark'] .incorrect-explain {color: #e86868} /* 27% lighter than arm's websafe red */
+
+
+#error-answer-all-questions-message {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+#error-answer-all-questions-message.smooth-open {
+    opacity: 1;
+}
+
+
+#push-to-next-steps-div {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.5s;
+    transition-delay: 3s;
+}
+#push-to-next-steps-div.smooth-open {
+    opacity: 1;
+}
+
+.checkbox-icon {
+    opacity: 0;
+    transition: opacity 1s;  
+}
+
+.checkbox-icon.smooth-open {
+    opacity: 1;
+}
+
+.info_text_preexplination {
+    opacity: 0;
+    transition: opacity 1s;  
+}
+
+.info_text_preexplination.smooth-open {
+    opacity: 1;
 }

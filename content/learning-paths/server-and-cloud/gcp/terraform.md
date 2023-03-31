@@ -8,12 +8,15 @@ weight: 3 # 1 is first, 2 is second, etc.
 layout: "learningpathall"
 ---
 
-## Prerequisites
-* An [installation of Terraform](https://www.terraform.io/cli/install/apt)
-* A Google cloud account
-* An [installation of Google Cloud CLI](https://cloud.google.com/sdk/docs/install-sdk#deb)
-
 # Deploy an Arm based VM using Terraform
+
+## Generate an SSH key-pair
+
+Generate an SSH key-pair (public key, private key) using `ssh-keygen` to use for Arm VMs access. To generate the key-pair, follow this [documentation](/install-guides/ssh#ssh-keys).
+
+{{% notice Note %}}
+If you already have an SSH key-pair present in the `~/.ssh` directory, you can skip this step.
+{{% /notice %}}
 
 ## Acquire user credentials
 Run the following command to obtain user access credentials:
@@ -32,20 +35,6 @@ Now paste the authentication code as below:
 
 ![image](https://user-images.githubusercontent.com/67620689/204242841-58e30570-1f88-4755-b3d2-32d7052a9b5d.PNG)
 
-## Generate key-pair(public key, private key) using ssh keygen
-Before using Terraform, we need to first generate the key-pair(public key, private key) using ssh-keygen. Then we are going to associate both public and private keys with Arm VMs.
-
-Generate the key pair using the following command:
-```
-  ssh-keygen -t rsa -b 2048
-```
-
-By default, the above command will generate the public as well as private key at location **~/.ssh**. But we can override the end destination with a custom path(Eg: **/home/ubuntu/gcp/** followed by key name **gcp_keys**).
-
-**Output when a key pair is generated:**
-
-![image](https://user-images.githubusercontent.com/67620689/204243311-cb5bb41b-e0ec-489c-987d-f54522486797.PNG)
-
 ## Terraform infrastructure
 Add resources required to create a VM in `main.tf`.
 
@@ -56,11 +45,6 @@ provider "google" {
   project = "project_id"
   region = "us-central1"
   zone = "us-central1-a"
-}
-
-resource "google_compute_project_metadata_item" "ssh-keys" {
-  key   = "ssh-keys"
-  value = "ubuntu:${file("public_key_location")}"
 }
 
 resource "google_compute_instance" "vm_instance" {
@@ -78,6 +62,10 @@ resource "google_compute_instance" "vm_instance" {
     access_config {
       // Ephemeral public IP
     }
+  }
+
+  metadata = {
+     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
 }
 ```
@@ -103,7 +91,7 @@ Run `terraform plan` to create an execution plan.
 
 * The **terraform plan** command is optional. We can directly run **terraform apply** command. But it is always better to check the resources about to be created.
 * The terraform plan command creates an execution plan, but doesn't execute it. Instead, it determines what actions are necessary to create the configuration specified in your configuration files. This pattern allows you to verify whether the execution plan matches your expectations before making any changes to actual resources.
-* The optional -out parameter allows you to specify an output file for the plan. Using the -out parameter ensures that the plan you reviewed is exactly what is applied.
+* The optional `-out` parameter allows you to specify an output file for the plan. Using the `-out` parameter ensures that the plan you reviewed is exactly what is applied.
 
 ### Apply a Terraform execution plan
 Run `terraform apply` to apply the execution plan to your cloud infrastructure. Below command creates all required infrastructure.
@@ -123,9 +111,9 @@ In the Google Cloud console, go to the [VM instances page](https://console.cloud
 Run following command to connect to VM through SSH:
 
 ```
-  ssh -i "/home/ubuntu/gcp/gcp_keys" ubuntu@<Public IP/DNS address>
+  ssh ubuntu@<Public IP>
 ```
-![image](https://user-images.githubusercontent.com/67620689/204244402-b0eeb224-de92-45fe-90a7-e10d2408da99.PNG)
+![image](https://user-images.githubusercontent.com/67620689/227440366-00847742-a431-4439-88fe-6b9147e9d042.PNG)
 
 ### Clean up resources
 
