@@ -510,7 +510,8 @@ You will create two `.py` files on the host machine to deploy Redis as a MySQL c
 MYSQL_TEST=[["{{public_ip of MYSQL_TEST[0]}}", "arm_test1"],
 ["{{public_ip of MYSQL_TEST[1]}}", "arm_test2"]]
 ```
-Replace `{{public_ip of MYSQL_TEST[0]}}` & `{{public_ip of MYSQL_TEST[1]}}` with the public IPs generated in the `hosts` file after running the Terraform commands.
+Replace `{{public_ip of MYSQL_TEST[0]}}` & `{{public_ip of MYSQL_TEST[1]}}` with the public IPs generated in the `/tmp/inventory` file after running the Terraform commands.
+
 `redis_cache.py` to access data from Redis Cache and, if not present, store it in the Redis Cache.   
 ```console
 import sys
@@ -565,7 +566,7 @@ python3 redis_cache.py -db {database_name} -k {key} -q {query}
 ```
 Replace `{database_name}` with the database you want to access, `{query}` with the query you want to run in the database, and `{key}` with a variable to store the result of the query in Redis cache.
 
-When the script is executed for the first time, the data is loaded from the MySQL database and stored on the Redis cache.
+When the script is executed for the first time, the data is loaded from the MySQL database and stored in the Redis cache.
 
 The output will be:
 ```output
