@@ -363,7 +363,7 @@ Replace `{public_ip of instance where Mysql deployed}`, `{user of database}` and
 
 The output will be:
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ mysql -h 18.188.123.253 -P3306 -u Local_user -p
+ubuntu@ip-172-31-38-39:~/mysql$ mysql -h 18.188.123.253 -P3306 -u Local_user -p
 Enter password:
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
@@ -570,13 +570,13 @@ When the script is executed for the first time, the data is loaded from the MySQ
 
 The output will be:
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ python3 redis_cache.py  -db arm_test1 -k AA -q "select * from book limit 3"
+ubuntu@ip-172-31-38-39:~/mysql$ python3 redis_cache.py  -db arm_test1 -k AA -q "select * from book limit 3"
 Updated redis with MySQL data
 (('Abook', '10'), ('Bbook', '20'), ('Cbook', '20'))
 ```
 
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ python3 redis_cache.py  -db arm_test2 -k BB -q "select * from movie limit 3"
+ubuntu@ip-172-31-38-39:~/mysql$ python3 redis_cache.py  -db arm_test2 -k BB -q "select * from movie limit 3"
 Updated redis with MySQL data
 (('Amovie', '1'), ('Bmovie', '2'), ('Cmovie', '3'))
 ```
@@ -585,13 +585,13 @@ When executed after that, it loads the data from Redis cache. In the example abo
 
 The output will be:
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ python3 redis_cache.py  -db arm_test1 -k AA -q "select * from book limit 3"
+ubuntu@ip-172-31-38-39:~/mysql$ python3 redis_cache.py  -db arm_test1 -k AA -q "select * from book limit 3"
 Loaded data from redis
 b"('Abook', '10') ('Bbook', '20') ('Cbook', '20')"
 ```
 
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ python3 redis_cache.py  -db arm_test2 -k BB -q "select * from movie limit 3"
+ubuntu@ip-172-31-38-39:~/mysql$ python3 redis_cache.py  -db arm_test2 -k BB -q "select * from movie limit 3"
 Loaded data from redis
 b"('Amovie', '1') ('Bmovie', '2') ('Cmovie', '3')"
 ```
@@ -617,7 +617,7 @@ get <key>
 The output will be:
 
 ```output
-ubuntu@ip-172-31-38-39:~/mysql_final$ redis-cli -p 6379
+ubuntu@ip-172-31-38-39:~/mysql$ redis-cli -p 6379
 127.0.0.1:6379> get AA
 "('Abook', '10') ('Bbook', '20') ('Cbook', '20')"
 127.0.0.1:6379> get BB
