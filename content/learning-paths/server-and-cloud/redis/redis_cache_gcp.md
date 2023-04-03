@@ -263,11 +263,11 @@ PLAY RECAP *********************************************************************
 
 Follow the instructions given in this [documentation](/learning-paths/server-and-cloud/redis/redis_cache_aws#connect-to-database-from-local-machine) to connect to the database from local machine.
 
-## Deploy Memcached as a cache for MySQL using Python
+## Deploy Redis as a cache for MySQL using Python
 
 Follow the instructions given in this [documentation](/learning-paths/server-and-cloud/redis/redis_cache_aws#deploy-redis-as-a-cache-for-mysql-using-python) to deploy Redis as a cache for MySQL using Python.
 
-You have successfully deployed Memcached as a cache for MySQL on a Google Cloud Arm based Instance.
+You have successfully deployed Redis as a cache for MySQL on a Google Cloud Arm based Instance.
 
 ### Clean up resources
 
