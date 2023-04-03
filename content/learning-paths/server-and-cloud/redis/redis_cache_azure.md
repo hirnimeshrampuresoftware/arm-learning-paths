@@ -1,6 +1,6 @@
 ---
 # User change
-title: "Deploy Redis as a cache for MySQL on Azure Arm based Instance"
+title: "Deploy Redis as a cache for MySQL on an Azure Arm based Instance"
 
 weight: 9 # 1 is first, 2 is second, etc.
 
@@ -8,7 +8,7 @@ weight: 9 # 1 is first, 2 is second, etc.
 layout: "learningpathall"
 ---
 
-##  Deploy Redis as a cache for MySQL on Azure Arm based Instance
+##  Deploy Redis as a cache for MySQL on an Azure Arm based Instance
 
 You can deploy Redis as a cache for MySQL on Azure using Terraform and Ansible. 
 
