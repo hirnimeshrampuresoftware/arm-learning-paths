@@ -280,7 +280,7 @@ Replace `{{Your_mysql_password}}` and `{{Give_any_password}}` in this file with 
 
 ### Ansible Commands
 
-Substitute your private key name, and run the playbook using the  `ansible-playbook` command:
+Run the playbook using the  `ansible-playbook` command:
 
 ```console
 ansible-playbook playbook.yaml -i /tmp/inventory
