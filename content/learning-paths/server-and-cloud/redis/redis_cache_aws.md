@@ -560,7 +560,10 @@ else:
 ```
 Replace `{{Your_database_user}}` & `{{Your_database_password}}` with the database user and password created through Ansible-Playbook. Also change the `range` in `for loop` according to the number of instances created.
 
-Install the required Python modules using `pip`:
+Install the required Python modules using `pip` and other required dependencies:
+```console
+sudo apt-get install redis libmysqlclient-dev
+```
 ```console
 pip install redis mysqlclient
 ```
