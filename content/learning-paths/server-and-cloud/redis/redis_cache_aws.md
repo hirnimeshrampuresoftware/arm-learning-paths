@@ -562,7 +562,7 @@ Replace `{{Your_database_user}}` & `{{Your_database_password}}` with the databas
 
 Install the required Python modules using `pip` and other required dependencies:
 ```console
-sudo apt-get install redis libmysqlclient-dev
+apt-get install redis libmysqlclient-dev
 ```
 ```console
 pip install redis mysqlclient
