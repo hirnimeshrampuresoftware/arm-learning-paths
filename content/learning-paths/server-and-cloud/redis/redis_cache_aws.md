@@ -560,7 +560,12 @@ else:
 ```
 Replace `{{Your_database_user}}` & `{{Your_database_password}}` with the database user and password created through Ansible-Playbook. Also change the `range` in `for loop` according to the number of instances created.
 
-To execute the script, run the following command:
+Install the required Python modules using `pip`:
+```console
+pip install redis mysqlclient
+```
+
+To execute the `redis_cache.py` script, run the following command:
 ```console
 python3 redis_cache.py -db {database_name} -k {key} -q {query}
 ```
