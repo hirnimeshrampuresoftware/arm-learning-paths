@@ -459,6 +459,7 @@ PSQL_TEST=[["{{public_ip of PSQL_TEST[0]}}", "arm_test1"],
 ["{{public_ip of PSQL_TEST[1]}}", "arm_test2"]]
 ```
 Replace `{{public_ip of PSQL_TEST[0]}}` & `{{public_ip of PSQL_TEST[1]}}` with the public IPs generated in the `/tmp/inventory` file after running the Terraform commands.
+
 `memcached.py` to access data from Memcached and, if not present, store it in the Memcached.       
 ```console
 import sys
