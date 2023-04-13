@@ -463,7 +463,7 @@ Replace `{{public_ip of PSQL_TEST[0]}}` & `{{public_ip of PSQL_TEST[1]}}` with t
 `memcached.py` to access data from Memcached and, if not present, store it in the Memcached.       
 ```console
 import sys
-import MySQLdb
+import psycopg2
 import pymemcache
 from values import *
 from ast import literal_eval
@@ -478,36 +478,33 @@ args = parser.parse_args()
 memc = pymemcache.Client("127.0.0.1:11211");
 
 for i in range(0,2):
-    if (MYSQL_TEST[i][1]==args.database):
+    if (PSQL_TEST[i][1]==args.database):
         try:
-            conn = MySQLdb.connect (host = MYSQL_TEST[i][0],
-                                    user = "{{Your_database_user}}",
-                                    passwd = "{{Your_database_password}}",
-                                    db = MYSQL_TEST[i][1])
-        except MySQLdb.Error as e:
-             print ("Error %d: %s" % (e.args[0], e.args[1]))
+            conn = psycopg2.connect (host = PSQL_TEST[i][0], dbname = PSQL_TEST[i][1], user="postgres")
+        except psycopg2.OperationalError as e:
+             print('Unable to connect!\n{0}').format(e)
              sys.exit (1)
 
-        sqldata = memc.get(args.key)
+        psqldata = memc.get(args.key)
 
-        if not sqldata:
+        if not psqldata:
             cursor = conn.cursor()
             cursor.execute(args.query)
             rows = cursor.fetchall()
             memc.set(args.key,rows,120)
-            print ("Updated memcached with MySQL data")
+            print ("Updated memcached with PSQL data")
             for x in rows:
                 print(x)
         else:
             print ("Loaded data from memcached")
-            data = tuple(literal_eval(sqldata.decode("utf-8")))
+            data = tuple(literal_eval(psqldata.decode("utf-8")))
             for row in data:
-                print (f"{row[0]},{row[1]}")
+                print (row)
         break
 else:
-    print("this database doesn't exist")            
+    print("this database doesn't exist")        
 ```
-Replace `{{Your_database_user}}` & `{{Your_database_password}}` with the database user and password created through Ansible-Playbook. Also change the `range` in `for loop` according to the number of instances created.
+Change the `range` in `for loop` according to the number of instances created.
 
 To execute the script, run the following command:
 ```console
