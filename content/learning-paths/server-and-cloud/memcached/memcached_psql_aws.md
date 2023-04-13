@@ -406,18 +406,16 @@ The output will be:
 
 ```output
 arm_test1=# select * from book;
-+--------+------+
-| name   | id   |
-+--------+------+
-| Abook  | 10   |
-| Bbook  | 20   |
-| Cbook  | 20   |
-| Dbook  | 30   |
-| Ebook  | 45   |
-| Fbook  | 40   |
-| Gbook
- | 69   |
-+--------+------+
+    name    | id
+------------+----
+ Abook      | 10
+ Bbook      | 20
+ Cbook      | 20
+ Dbook      | 30
+ Ebook      | 45
+ Fbook      | 40
+ Gbook     +| 69
+            |
 (7 rows)
 ```
 
