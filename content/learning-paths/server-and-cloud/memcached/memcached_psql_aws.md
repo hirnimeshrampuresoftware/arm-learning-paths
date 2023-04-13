@@ -512,7 +512,7 @@ python3 memcached.py -db {database_name} -k {key} -q {query}
 ```
 Replace `{database_name}` with the database you want to access, `{query}` with the query you want to run in the database, and `{key}` with a variable to store the result of the query in Memcached.
 
-When the script is executed for the first time, the data is loaded from the MySQL database and stored on the Memcached server.
+When the script is executed for the first time, the data is loaded from the PostgreSQL database and stored on the Memcached server.
 
 The output will be:
 ```output
@@ -551,7 +551,7 @@ Loaded data from memcached
 
 ### Memcached Telnet Commands
 
-Execute the steps below to verify that the MySQL query is getting stored in Memcached.
+Execute the steps below to verify that the PostgreSQL query is getting stored in Memcached.
 1. Connect to the Memcached server with Telnet and start a session.
 ```console
 telnet localhost 11211
