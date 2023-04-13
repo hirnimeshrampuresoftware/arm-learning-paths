@@ -374,6 +374,7 @@ WARNING: psql major version 14, server major version 15.
          Some psql features might not work.
 SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
 You are now connected to database "arm_test1" as user "postgres".```
+```
 
 2. Use the below commands to create a table and insert values into it.
 
