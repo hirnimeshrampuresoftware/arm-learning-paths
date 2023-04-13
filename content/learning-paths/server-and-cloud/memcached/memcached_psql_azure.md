@@ -234,13 +234,12 @@ resource "azurerm_linux_virtual_machine" "PSQL_TEST" {
   }
 }
 resource "local_file" "inventory" {
-    depends_on=[azurerm_linux_virtual_machine.MYSQL_TEST]
+    depends_on=[azurerm_linux_virtual_machine.PSQL_TEST]
     filename = "/tmp/inventory"
     content = <<EOF
-[mysql1]
-${azurerm_linux_virtual_machine.MYSQL_TEST[0].public_ip_address}
-[mysql2]
-${azurerm_linux_virtual_machine.MYSQL_TEST[1].public_ip_address}
+[db_master]
+${azurerm_linux_virtual_machine.PSQL_TEST[0].public_ip_address}
+${azurerm_linux_virtual_machine.PSQL_TEST[1].public_ip_address}
 [all:vars]
 ansible_connection=ssh
 ansible_user=ubuntu
