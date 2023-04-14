@@ -62,7 +62,7 @@ resource "aws_instance" "PSQL_TEST" {
   key_name = aws_key_pair.deployer.key_name
 
   tags = {
-    Name = "PSQL_TEST_hirni"
+    Name = "PSQL_TEST"
   }
 }
 resource "aws_default_vpc" "main" {
