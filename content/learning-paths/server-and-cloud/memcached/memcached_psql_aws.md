@@ -270,7 +270,7 @@ Using a text editor, save the code below in a file called `playbook.yaml`. This 
 
 ### Ansible Commands
 
-Substitute your private key name, and run the playbook using the  `ansible-playbook` command:
+Run the playbook using the  `ansible-playbook` command:
 
 ```console
 ansible-playbook playbook.yaml -i /tmp/inventory
