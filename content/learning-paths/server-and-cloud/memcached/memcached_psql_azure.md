@@ -314,9 +314,9 @@ Apply complete! Resources: 16 added, 0 changed, 0 destroyed.
 
 ## Configure Postgres through Ansible
 
-Install MySQL and the required dependencies on both the instances.
+Install Postgres and the required dependencies on both the instances.
 
-You can use the same `playbook.yaml` file used in the section, [Deploy Postgres as a cache for MySQL on an AWS Arm based Instance](/learning-paths/server-and-cloud/memcached/memcached_mysql_aws#configure-mysql-through-ansible).
+You can use the same `playbook.yaml` file used in the section, [Deploy Memcached as a cache for Postgres on an AWS Arm based Instance](/learning-paths/server-and-cloud/memcached/memcached_psql_aws#configure-postgres-through-ansible).
 
 ### Ansible Commands
 
@@ -408,4 +408,4 @@ Run `terraform destroy` to delete all resources created.
 terraform destroy
 ```
 
-Continue the Learning Path to deploy Memcached as a cache for PostgreSQL on a GCP Arm based Instance.
+Continue the Learning Path to deploy Memcached as a cache for Postgres on a GCP Arm based Instance.
