@@ -25,7 +25,7 @@ Any computer which has the required tools installed can be used for this section
 You will need an [AWS account](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start) to complete this Learning Path. Create an account if you don't have one.
 
 Before you begin, you will also need:
-- An AWS access key ID and secret access key. 
+- An AWS access key ID and secret access key
 - An SSH key pair
 
 The instructions to create the keys are below.
