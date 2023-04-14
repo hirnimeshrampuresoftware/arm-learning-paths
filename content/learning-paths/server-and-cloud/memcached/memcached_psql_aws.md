@@ -226,7 +226,7 @@ Using a text editor, save the code below in a file called `playbook.yaml`. This 
       package:
         name:
         - acl
-    - name: Install Python pip & Python package
+    - name: Install Python pip
       apt: name={{ item }} update_cache=true state=present force_apt_get=yes
       with_items:
       - python3-pip
@@ -301,7 +301,7 @@ TASK [Install PostgreSQL packages] *********************************************
 ok: [3.133.99.23]
 ok: [18.217.248.242]
 
-TASK [Install Python pip & Python package] ******************************************************************************************************************
+TASK [Install Python pip] *********************************************************************************************************************************
 ok: [18.217.248.242] => (item=python3-pip)
 ok: [3.133.99.23] => (item=python3-pip)
 
