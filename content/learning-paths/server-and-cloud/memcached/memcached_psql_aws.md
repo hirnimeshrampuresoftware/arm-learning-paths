@@ -222,14 +222,11 @@ Using a text editor, save the code below in a file called `playbook.yaml`. This 
     - name: Update apt repo and cache on all Debian/Ubuntu boxes
       apt:  upgrade=yes update_cache=yes force_apt_get=yes cache_valid_time=3600
       become: true
-    - name: Install PostgreSQL packages
-      package:
-        name:
-        - acl
-    - name: Install Python pip
+    - name: Install Python pip and PostgreSQL package
       apt: name={{ item }} update_cache=true state=present force_apt_get=yes
       with_items:
       - python3-pip
+      - acl
       become: true
     - name: Start and enable services
       service: "name={{ item }} state=started enabled=yes"
@@ -297,11 +294,7 @@ TASK [Update apt repo and cache on all Debian/Ubuntu boxes] ********************
 ok: [3.133.99.23]
 ok: [18.217.248.242]
 
-TASK [Install PostgreSQL packages] ******************************************************************************************************************
-ok: [3.133.99.23]
-ok: [18.217.248.242]
-
-TASK [Install Python pip] *********************************************************************************************************************************
+TASK [Install Python pip and PostgreSQL package] ***************************************************************************************************************
 ok: [18.217.248.242] => (item=python3-pip)
 ok: [3.133.99.23] => (item=python3-pip)
 
@@ -322,8 +315,8 @@ ok: [3.133.99.23]
 ok: [18.217.248.242]
 
 PLAY RECAP **************************************************************************************************************************************************
-18.217.248.242             : ok=9    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-3.133.99.23                : ok=9    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+18.217.248.242             : ok=8    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+3.133.99.23                : ok=8    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
 ## Connect to Database from local machine
