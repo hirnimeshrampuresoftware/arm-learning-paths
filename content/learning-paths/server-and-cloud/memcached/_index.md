@@ -9,7 +9,7 @@ learning_objectives:
 - Install and run memcached on your Arm-based cloud server
 - Use an open-source benchmark to test memcached performance
 learning_path_main_page: 'yes'
-minutes_to_complete: 40
+minutes_to_complete: 10
 operatingsystems:
 - Linux
 prerequisites:
