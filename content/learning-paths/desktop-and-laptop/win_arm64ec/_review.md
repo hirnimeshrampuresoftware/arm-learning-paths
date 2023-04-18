@@ -13,24 +13,23 @@
 review:
     - questions:
         question: >
-            Does SIMD Everywhere work to port AVX512 to NEON?
-        answers:
-            - "Yes"
-            - "No"
-        correct_answer: 1                  
-        explanation: >
-            Yes, SIMD Everywhere can port AVX512 to NEON. 
-
-    - questions:
-        question: >
-            When porting code to Arm Neoverse, SSE intrinsics must be re-written to use NEON intrinsics
+            Applications can be built with Arm64EC on Windows 10 machines.
         answers:
             - "True"
             - "False"
-        correct_answer: 2                    
+        correct_answer: 2               
         explanation: >
-            False, there is no need to re-write intrinsics. 
-               
+            Arm64EC requires an Arm machine running Windows 11.
+
+    - questions:
+        question: >
+            Arm64EC code is not interoperable with x64 code running under emulation.
+        answers:
+            - "True"
+            - "False"
+        correct_answer: 2
+        explanation: >
+            Arm64EC code is interoperable with x64 code. Arm64EC code runs with native Arm performance, whereas any x64 code runs using emulation on Windows 11. 
 
 # ================================================================================
 #       FIXED, DO NOT MODIFY
