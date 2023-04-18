@@ -2,15 +2,13 @@
 armips:
 - Neoverse
 author_primary: Pareena Verma
-description: Learn how to install and measure the performance of memcached on Arm
-  servers
+description: Learn how to install Memcached as a cache for MySQL and PostgreSQL on Arm servers
 layout: learningpathall
 learning_objectives:
-- Install and run memcached on your Arm-based cloud server
-- Use an open-source benchmark to test memcached performance
 - Deploy memcached as a cache for MySQL
+- Deploy memcached as a cache for PostgreSQL
 learning_path_main_page: 'yes'
-minutes_to_complete: 40
+minutes_to_complete: 60
 operatingsystems:
 - Linux
 prerequisites:
@@ -26,7 +24,7 @@ test_link: https://github.com/armflorentlebeau/arm-learning-paths/actions/runs/4
 test_maintenance: true
 test_status:
 - passed
-title: Run memcached on Arm servers and measure its performance
+title: Deploy Memcached as a cache for MySQL & PostgreSQL
 tools_software_languages:
 - Memcached
 weight: 1
