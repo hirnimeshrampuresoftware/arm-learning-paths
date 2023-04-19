@@ -19,7 +19,7 @@ review:
             - "False"
         correct_answer: 1                   
         explanation: >
-            For Memorystore in Memcached, the minimum value is 512 KiB , the maximum value is 128 MiB , and the default value is 1 MiB.
+            Memorystore in Memcached has the minimum value of 512 KiB, the maximum value of 128 MiB , and the default value is 1 MiB.
 
     - questions:
         question: >
