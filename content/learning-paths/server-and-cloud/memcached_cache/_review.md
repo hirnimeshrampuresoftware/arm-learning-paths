@@ -13,23 +13,23 @@
 review:
     - questions:
         question: >
-            Does Memcached run on Arm servers?
+            Memcached cannot cache large objects.
         answers:
-            - "Yes"
-            - "No"
+            - "True"
+            - "False"
         correct_answer: 1                   
         explanation: >
-            Memcached is fully supported on 64-bit Arm servers running Linux.
+            For Memorystore for Memcached the minimum value is 512 KiB , the maximum value is 128 MiB , and the default value is 1 MiB.
 
     - questions:
         question: >
-            Which port number does memcached run on by default?
+            Memcached can retain the stored information even when item form cache is deleted.
         answers:
-            - "11211"
-            - "22"
-        correct_answer: 1                   
+            - "True"
+            - "False"
+        correct_answer: 2
         explanation: >
-            By default, memcached exposes UDP 11211
+            Memcached cannot retain the stored information when item form the cache is deleted.
                
 
 # ================================================================================
