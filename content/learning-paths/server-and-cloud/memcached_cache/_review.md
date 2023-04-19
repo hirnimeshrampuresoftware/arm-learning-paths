@@ -23,13 +23,13 @@ review:
 
     - questions:
         question: >
-            Memcached can retain the stored information even when item form cache is deleted.
+            Memcached can retain the stored information even when item from the cache is deleted.
         answers:
             - "True"
             - "False"
         correct_answer: 2
         explanation: >
-            Memcached cannot retain the stored information when item form the cache is deleted.
+            Memcached cannot retain the stored information when item from the cache is deleted.
 
     - questions:
         question: >
