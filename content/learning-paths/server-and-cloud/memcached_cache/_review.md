@@ -19,7 +19,7 @@ review:
             - "False"
         correct_answer: 1                   
         explanation: >
-            For Memorystore for Memcached the minimum value is 512 KiB , the maximum value is 128 MiB , and the default value is 1 MiB.
+            For Memorystore in Memcached, the minimum value is 512 KiB , the maximum value is 128 MiB , and the default value is 1 MiB.
 
     - questions:
         question: >
@@ -30,7 +30,17 @@ review:
         correct_answer: 2
         explanation: >
             Memcached cannot retain the stored information when item form the cache is deleted.
-               
+
+    - questions:
+        question: >
+            It is possible to share a single instance of Memcache between multiple projects.
+        answers:
+            - "True"
+            - "False"
+        correct_answer: 1
+        explanation: >
+            Yes, it is possible to share a single instance of Memcache between multiple projects because Memcache is a memory store space and it can be run on one or more servers. 
+
 
 # ================================================================================
 #       FIXED, DO NOT MODIFY
