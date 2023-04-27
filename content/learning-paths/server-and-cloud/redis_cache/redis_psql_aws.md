@@ -578,4 +578,4 @@ Run `terraform destroy` to delete all resources created.
 terraform destroy
 ```
 
-Continue the Learning Path to deploy Redis as a cache for MySQL on an Azure Arm based Instance.
+Continue the Learning Path to deploy Redis as a cache for Postgres on an Azure Arm based Instance.
