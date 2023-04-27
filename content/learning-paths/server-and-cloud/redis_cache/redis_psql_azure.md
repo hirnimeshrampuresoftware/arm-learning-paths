@@ -312,7 +312,7 @@ Apply complete! Resources: 16 added, 0 changed, 0 destroyed.
 
 Install Postgres and the required dependencies on both the instances.
 
-Follow the instructions given in this [documentation](/learning-paths/server-and-cloud/redis_cache/redis_psql_aws#ansible-commands) to configure Postgres through Ansible.
+Follow the instructions given in this [documentation](/learning-paths/server-and-cloud/redis_cache/redis_psql_aws#configure-postgres-through-ansible) to configure Postgres through Ansible.
 
 ## Connect to Database from local machine
 
