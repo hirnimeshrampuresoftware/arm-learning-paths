@@ -14,7 +14,7 @@ You can deploy Redis as a cache for Postgres on Azure using Terraform and Ansibl
 
 In this section, you will deploy Redis as a cache for Postgres on an Azure instance. 
 
-If you are new to Terraform, you should look at [Automate Azure instance creation using Terraform](/learning-paths/server-and-cloud/azure/terraform/) before starting this Learning Path.
+If you are new to Terraform, you should look at [Automate Azure instance creation using Terraform](/learning-paths/server-and-cloud/azure-terraform/terraform) before starting this Learning Path.
 
 ## Before you begin
 
