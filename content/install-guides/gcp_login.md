@@ -12,7 +12,6 @@ minutes_to_complete: 10
 author_primary: Jason Andrews
 
 ### Combined with gcloud install. This install guide to be deleted.
-draft: true
 
 ### Link to official documentation
 official_docs: https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login
