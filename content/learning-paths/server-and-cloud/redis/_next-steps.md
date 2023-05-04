@@ -4,7 +4,7 @@
 # ================================================================================
 
 next_step_guidance: >
-    If you are interested in deploying Redis as a cache on Arm, continue on to the recommended learning path.
+    If you are interested in deploying Redis as a cache on Arm, continue on to the recommended Learning Path.
 # 1-3 sentence recommendation outlining how the reader can generally keep learning about these topics, and a specific explanation of why the next step is being recommended.
 
 recommended_path: "/learning-paths/server-and-cloud/redis_cache/"
