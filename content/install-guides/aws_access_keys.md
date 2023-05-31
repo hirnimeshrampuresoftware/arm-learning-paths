@@ -32,7 +32,7 @@ Install the AWS CLI on your machine using the [install guide](/install-guides/aw
 
 Go to My Security Credentials
 
-![alt-text #center](https://user-images.githubusercontent.com/87687468/190137370-87b8ca2a-0b38-4732-80fc-3ea70c72e431.png "Security credentials")
+![Screenshot 2023-05-31 110650](https://github.com/hirnimeshrampuresoftware/arm-learning-paths/assets/71631645/3471a70b-8fbf-4403-b3fc-46075c6dca46)
 
 On Your Security Credentials page click on `Create access key`
 
