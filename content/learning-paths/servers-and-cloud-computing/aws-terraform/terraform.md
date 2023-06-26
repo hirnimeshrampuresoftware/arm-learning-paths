@@ -104,13 +104,13 @@ resource "aws_instance" "ec2_example" {
     
 ```console
 provider "aws" {
-  region     = "us-east-2"
+  region = "us-east-2"
 }
 
 resource "aws_instance" "ec2_example" {
-  ami = "ami-02a92e06fd643c11b"  
-  instance_type = "t4g.nano" 
-  key_name= aws_key_pair.deployer.key_name
+  ami                    = "ami-02a92e06fd643c11b"
+  instance_type          = "t4g.nano"
+  key_name               = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.main.id]
 
   provisioner "remote-exec" {
@@ -136,7 +136,7 @@ resource "aws_instance" "ec2_example" {
 resource "aws_security_group" "main" {
   egress = [
     {
-      cidr_blocks      = [ "0.0.0.0/0", ]
+      cidr_blocks      = ["0.0.0.0/0", ]
       description      = ""
       from_port        = 0
       ipv6_cidr_blocks = []
@@ -149,7 +149,7 @@ resource "aws_security_group" "main" {
   ]
   ingress = [
     {
-      cidr_blocks      = [ "0.0.0.0/0", ]
+      cidr_blocks      = ["0.0.0.0/0", ]
       description      = ""
       from_port        = 22
       ipv6_cidr_blocks = []
