@@ -5,6 +5,8 @@ title: AWS Credentials
 
 ### Optional additional search terms (one per line) to assist in finding the article
 additional_search_terms:
+- cloud
+- deploy
 
 ### Estimated completion time in minutes (please use integer multiple of 5)
 minutes_to_complete: 10
@@ -22,7 +24,7 @@ multitool_install_part: false   # Set to true if a sub-page of a multi-page arti
 layout: installtoolsall         # DO NOT MODIFY. Always true for tool install articles
 ---
 
-In this section you will learn how to generate Access keys. Access keys consist of an access key ID and secret access key, which are used to sign programmatic requests that you make to AWS.
+In this section you will learn how to generate and configure Access keys. Access keys consist of an access key ID and secret access key, which are used to sign programmatic requests that you make to AWS.
 
 ## Before you begin
 

@@ -1,0 +1,292 @@
+{{define "main"}}
+
+
+{{/* Hugo Processing  */}}
+{{/*===================================================================*/}}
+    <!--  Create accessable data vars -->
+    {{ $this_week_stats := index .Site.Data.stats_weekly_data (sub (len .Site.Data.stats_weekly_data) 1) }}
+
+    <!-- reorganize contributor data -->
+    {{$authors_dict_array := slice }}
+    {{$unique_internal := 0}}
+    {{$unique_external := 0}}
+
+    {{range $author_urlized, $contributions := $this_week_stats.individual_authors}}
+        <!-- find company name of author -->
+        {{$company := ""}}
+        {{$author := replace $author_urlized "-" " " | title }}
+        {{ range $i, $row := getCSV "," "contributors.csv" }}
+            {{ if eq  $author (index $row 0)}}
+                <!-- Get company name of author -->
+                {{ $company = index $row 1 }}
+
+                <!-- Get unique internal/external contributor numbers -->
+                {{ if eq $company "Arm"}}
+                    {{$unique_internal = add 1 $unique_internal}}
+                {{else}}
+                    {{$unique_external = add 1 $unique_external}}
+                {{end}}
+            {{ end }}
+        {{ end }}
+        <!-- create sortable dict -->
+        {{ $temp := dict "author" $author "contributions" $contributions "company" $company }}
+        {{ $authors_dict_array = $authors_dict_array | append $temp }}
+    {{end}}
+{{/*===================================================================*/}}
+{{/*===================================================================*/}}
+
+
+
+
+
+
+<div class="c-row">
+    <div class="c-col">
+        <div class="u-display-grid sm:u-gap-0 md:u-gap-2 sm:u-grid-columns-1 md:u-grid-columns-2">
+            <!-- left card = total content -->
+            <ads-card class="stats-card" has-hover-effect>
+                <ads-card-content slot="content">
+                    <h1 id="total-content-num" class="orchard-breeze-text">
+                        {{$this_week_stats.content.total}}
+                    </h1>
+                    <p class="u-margin-left-1 total-content-context">Total Learning Paths and Install Guides as of {{$this_week_stats.a_date}}</p>
+                </ads-card-content>   
+            </ads-card>
+            <!-- right card = internal AND external contributors -->
+            <div class="u-display-grid u-grid-columns-1">
+                <!-- Internal -->
+                <ads-card class="stats-card" has-hover-effect>
+                    <ads-card-content slot="content">
+                        <h1 class="unique-contributor-num fullbourn-sunrise-text">
+                            {{$unique_internal}}
+                        </h1>
+                        <p class="u-margin-left-1">Internal unique contributors</p>
+                    </ads-card-content>   
+                </ads-card>
+                <!-- External -->
+                <ads-card class="stats-card" has-hover-effect>
+                    <ads-card-content slot="content">
+                        <h1 class="unique-contributor-num fullbourn-sunrise-text">
+                            {{$unique_external}}
+                        </h1>
+                        <p class="u-margin-left-1">External unique contributors</p>                    
+                    </ads-card-content>   
+                </ads-card>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<hr>
+<br>
+
+<div class="c-row">
+    <div class="c-col">
+        <h1>Content History</h1>
+        <p class="subtitle-stats">Tracks the number of individual Learning Paths (and Install Guides) created, updated every week.</p>
+    </div>
+</div>
+<div class="c-row u-margin-top-2">
+    <div class="c-col">
+        <!-- Content line chart container -->
+        <canvas id="content-history-chart"></canvas>
+    </div>
+</div>
+
+<br>
+<hr class="stats-dividing-bar">
+<br>
+
+<div class="c-row">
+    <div class="c-col">
+        <h1>Contributions History</h1>
+        <p class="subtitle-stats">Tracks the number of GitHub related engagement stats, updated every week.</p>
+    </div>
+</div>
+<div class="c-row u-margin-top-2">
+    <div class="c-col">
+        <!-- Contributions line chart container -->
+        <canvas id="contribution-history-chart"></canvas>    
+    </div>
+</div>
+
+<br>
+<hr class="stats-dividing-bar">
+<br>
+
+<div class="c-row">
+    <div class="c-col">
+        <h1>Logged Issues History</h1>
+    </div>
+</div>
+<div class="c-row">
+    <div class="c-col">
+        <div class="u-display-grid sm:u-gap-0 md:u-gap-2 sm:u-grid-columns-1 md:u-grid-columns-3">
+            <ads-card class="stats-card" has-hover-effect>
+                <ads-card-content slot="content">
+                    <p>Average time to close issues:</p>
+                    <h1 style="width:fit-content;" class="minhang-mist-text">{{$this_week_stats.issues.avg_close_time_hrs}} hours</h1>
+                </ads-card-content>   
+            </ads-card>
+            <ads-card class="stats-card" has-hover-effect>
+                <ads-card-content slot="content">
+                    <p>Issues raised, total:</p>
+                    <h1 style="width:fit-content;" class="minhang-mist-text">{{$this_week_stats.issues.num_issues}}</h1>
+                </ads-card-content>   
+            </ads-card>
+            <ads-card class="stats-card" has-hover-effect>
+                <ads-card-content slot="content">
+                    <p>Current open issue percentage:</p>
+                    <h1 style="width:fit-content;" class="minhang-mist-text">{{$this_week_stats.issues.percent_closed_vs_total}} %</h1>
+                </ads-card-content>   
+            </ads-card>            
+        </div>
+    </div>
+</div>
+
+<br>
+<hr class="stats-dividing-bar">
+<br>
+
+<div class="c-row">
+    <div class="c-col">
+        <h2>Authors</h2>
+    </div>
+</div>
+<div class="c-row">
+    <div class="c-col">
+        <div class="table-wrapper-for-overflow">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>
+                            Author
+                        </th>
+                        <th>
+                            Company
+                        </th>
+                        <th>
+                            Content written
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range sort $authors_dict_array "contributions" "desc" }}
+                    <tr>
+                        <td>
+                            {{.author}} 
+                        </td>
+                        <td>
+                            {{.company}} 
+                        </td>
+                        <td>
+                            {{.contributions}} 
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<br>
+<hr class="stats-dividing-bar">
+<br>
+
+<div class="c-row">
+    <div class="c-col">
+        <h2>Tests</h2>
+    </div>
+</div>
+<div class="c-row">
+    <div class="c-col">
+        <div class="u-display-grid sm:u-gap-0 md:u-gap-2 sm:u-grid-columns-1 md:u-grid-columns-2">
+            <ads-card class="stats-card" has-hover-effect>
+                <ads-card-content slot="content">
+                    <p>Number of content with failing tests:</p>
+                    <h1 style="width:fit-content;" class="minhang-mist-text">{{ sub .Site.Data.stats_current_test_info.summary.content_with_tests_enabled .Site.Data.stats_current_test_info.summary.content_with_all_tests_passing}}</h1>
+                </ads-card-content>   
+            </ads-card>
+            <ads-card class="stats-card" has-hover-effect>
+                <ads-card-content slot="content">
+                    <p>Content currently tested percentage:</p>
+                    {{$total := float .Site.Data.stats_current_test_info.summary.content_total}}
+                    {{$passed:= float .Site.Data.stats_current_test_info.summary.content_with_all_tests_passing }}
+                    <h1 style="width:fit-content;" class="minhang-mist-text">{{ printf "%.1f%%" (mul (div $passed $total) 100.0) }}</h1>
+                </ads-card-content>   
+            </ads-card>            
+        </div>
+    </div>
+</div>
+
+
+<div class="c-row">
+    <div class="c-col">
+        <div class="table-wrapper-for-overflow">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>
+                            Content Name
+                        </th>
+                        <th>
+                            Test Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range $key, $details := .Site.Data.stats_current_test_info.sw_categories }}
+                        {{if $details}}
+                        <tr>
+                            <td colspan="3" class="stats-table-row-highlight">
+                                {{replace $key "-" " " | title}}    
+                            </td>
+                        </tr>
+                            {{ range $name, $info := $details}}
+                                <tr>
+                                    <td>
+                                        {{$level_one_dir := "/learning-paths/"}}
+                                        {{if eq $key "install-guides"}}
+                                            {{$level_one_dir = "/"}}
+                                        {{end}}
+                                        <a href="{{$level_one_dir}}{{$key}}/{{$name}}">{{$info.readable_title}}</a>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                        {{range $index, $test_status := $info.tests_and_status}}
+                                            {{range $k, $v := $test_status}}                                                
+                                                {{- if eq $v "passed" -}}
+                                                    - <span class="test-status-pass">{{$k}}: {{$v}}</span>
+                                                {{- else -}}
+                                                    - <span class="test-status-fail">{{$k}}: {{$v}}</span>
+                                                {{end}}
+                                                <br>
+                                            {{end}}
+                                        {{end}}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {{end}}
+                        {{end}}
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="margin-bottom:150px"></div>
+
+
+
+
+
+
+
+
+
+
+
+{{end}}

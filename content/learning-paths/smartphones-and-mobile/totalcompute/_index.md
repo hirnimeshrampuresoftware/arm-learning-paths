@@ -1,7 +1,7 @@
 ---
 title: Get started with Arm Total Compute
 
-description: Get started with the reference software stack for Arm Total Compute
+draft: true
 
 minutes_to_complete: 60  
 
@@ -32,6 +32,8 @@ operatingsystems:
     - Android
 tools_software_languages:
     - GCC
+    - Total Compute
+    - Fixed Virtual Platform
 
 ### FIXED, DO NOT MODIFY
 # ================================================================================

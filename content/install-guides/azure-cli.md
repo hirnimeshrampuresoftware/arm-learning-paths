@@ -1,6 +1,8 @@
 ---
 additional_search_terms:
 - cloud
+- azure
+- 
 layout: installtoolsall
 minutes_to_complete: 15
 author_primary: Jason Andrews
@@ -67,4 +69,4 @@ source $HOME/.profile
 az version
 ```
 
-You are ready to use the Azure CLI.
+After a successful log in, you can use the [Azure CLI](../azure-cli) and automation tools like [Terraform](../terraform) from the terminal.

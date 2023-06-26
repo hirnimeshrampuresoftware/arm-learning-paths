@@ -2,7 +2,7 @@
 #       Add 'cross platform' into category checking and addition
 #       Record same for install guides
 #       Verify test data & totals matches reality
-#       -------- move on to authors&contributors
+#       -------- move on to individual_authors&contributors
 #       -------- move on to GitHub API
 
 
@@ -30,7 +30,7 @@ weekly_in_YYYY_MMM_DD:
         mobile: 3                 
         cross: 2                  # Number of learning paths in cross-platform area; for awareness
         install_guides: 10        
-    authors:                      # Dict of author stats. Source: Crawl over each LP and IG, urlize author name, and add totals
+    individual_authors:                      # Dict of author stats. Source: Crawl over each LP and IG, urlize author name, and add totals
         jason_andrews: 24
         pareena_verma: 22
         ronan_synnott: 15
@@ -84,8 +84,8 @@ from datetime import datetime
 
 
 # Set paths 
-data_weekly_file_path  = Path('../content/stats/stats_weekly_data.yml')
-tests_status_file_path = Path('../content/stats/stats_current_test_info.yml')
+data_weekly_file_path  = Path('../data/stats_weekly_data.yml')
+tests_status_file_path = Path('../data/stats_current_test_info.yml')
 learning_path_dir = Path('../content/learning-paths/')
 install_guide_dir = Path('../content/install-guides/')
 lp_and_ig_content_dirs = ['microcontrollers','embedded-systems','laptops-and-desktops','servers-and-cloud-computing','smartphones-and-mobile','cross-platform','install-guides']
@@ -145,15 +145,15 @@ def mdToMetadata(md_file_path):
     return metadata_dic
 
 def authorAdd(author_name,tracking_dic):
-    ### Update 'authors' area, raw number by each author.
+    ### Update 'individual_authors' area, raw number by each author.
     # Check if author already exists as key. If not, add new key
     author_urlized = urlize(author_name)
-    if author_urlized in tracking_dic['authors']:
+    if author_urlized in tracking_dic['individual_authors']:
         # Update number for this author
-        tracking_dic['authors'][author_urlized] = tracking_dic['authors'][author_urlized] + 1
+        tracking_dic['individual_authors'][author_urlized] = tracking_dic['individual_authors'][author_urlized] + 1
     else:
         # Add key to dic with 1 to their name
-        tracking_dic['authors'][author_urlized] = 1
+        tracking_dic['individual_authors'][author_urlized] = 1
 
     ### Update 'contributions' area, internal vs external contributions
     
@@ -179,7 +179,7 @@ def iterateContentIndexMdFiles():
         weekly_count_dic[category] = 0
 
         # weekly -> authors AND contributions
-    weekly_authors_contributions_dic = {'authors': {}, 'contributions':{'internal': 0, 'external': 0}}
+    weekly_authors_contributions_dic = {'individual_authors': {}, 'contributions':{'internal': 0, 'external': 0}}
 
         # tests -> summary:
     content_total = 0
@@ -271,9 +271,9 @@ def iterateContentIndexMdFiles():
     new_tests_entry['summary']['content_with_all_tests_passing'] = content_with_all_tests_passing
 
     # Update stats
-    new_weekly_entry[date_today]['content'] = weekly_count_dic
-    new_weekly_entry[date_today]['authors'] = weekly_authors_contributions_dic['authors']
-    new_weekly_entry[date_today]['contributions'] = weekly_authors_contributions_dic['contributions']            
+    new_weekly_entry['content'] = weekly_count_dic
+    new_weekly_entry['individual_authors'] = weekly_authors_contributions_dic['individual_authors']
+    new_weekly_entry['contributions'] = weekly_authors_contributions_dic['contributions']            
 
 def callGitHubAPI(GitHub_token,GitHub_repo_name):
 
@@ -344,8 +344,8 @@ def callGitHubAPI(GitHub_token,GitHub_repo_name):
     
 
     # Assign to main file
-    new_weekly_entry[date_today]['issues'] = weekly_github_dic['issues']
-    new_weekly_entry[date_today]['github_engagement'] = weekly_github_dic['github_engagement']
+    new_weekly_entry['issues'] = weekly_github_dic['issues']
+    new_weekly_entry['github_engagement'] = weekly_github_dic['github_engagement']
 
 
 def main():
@@ -364,13 +364,13 @@ def main():
     existing_tests_dic  = yaml.safe_load(tests_status_file_path.read_text())
 
     # Structure new data formats:
-    new_weekly_entry = { date_today: {
+    new_weekly_entry = { 
+        "a_date": date_today,
         "content": {},
-        "authors": {},
+        "individual_authors": {},
         "contributions": {},
         "issues": {},
-        "github_engagement": {}
-        }                    
+        "github_engagement": {}    
     }
 
     new_tests_entry = {
@@ -393,13 +393,27 @@ def main():
     ### Weekly
     # if weekly dict is empty, create key
     if not existing_weekly_dic:
-        existing_weekly_dic = {}
-    # if key already exists in dic, overwrite that day with more recent info
-    if date_today in existing_tests_dic:
-        existing_weekly_dic[date_today].update(new_weekly_entry[date_today])
-    else:
-        existing_weekly_dic.update(new_weekly_entry)
+        print('no existing dic, starting from scratch.')
+        existing_weekly_dic = [new_weekly_entry]
+    # Otherwise append it
+    else:  
+        print('weekly data exists...checking to see if date exists.')
+        # Check if date already a key in there
+        exists=False
+        for dic in existing_weekly_dic:
+            if date_today == dic["a_date"]:
+                print('date today included, don"t save')
+                exists=True
+                break
+        if not exists:
+            print('date doesn"t exist, appending data')
+            existing_weekly_dic.append(new_weekly_entry)
+
+    # Alter existing dic to be a list of dates for easier processing:
     with open(data_weekly_file_path, 'w') as outfile:
+        print('printing weekly dict format, and dumping into this file: ')
+        print(outfile)
+        print(existing_weekly_dic)
         yaml.dump(existing_weekly_dic, outfile, default_flow_style=False)
 
     ### Tests
