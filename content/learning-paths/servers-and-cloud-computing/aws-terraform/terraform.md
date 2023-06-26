@@ -59,9 +59,9 @@ Set:
 This is how `main.tf` will look like for AWS:
 
 ```console   
-      provider "aws" {
-        region     = "us-east-2"
-      } 
+provider "aws" {
+  region     = "us-east-2"
+} 
 ```
 
 ### Resource - "aws_instance"
