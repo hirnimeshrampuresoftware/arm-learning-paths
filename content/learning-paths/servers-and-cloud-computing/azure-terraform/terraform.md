@@ -375,7 +375,7 @@ From the **Azure Dashboard**, go to **Resource groups** and ensure that your res
 
 The **Resource group** name should match your output above.
 
-![image #center](https://user-images.githubusercontent.com/67620689/227440421-20642716-8eee-4f82-a5de-f4dd4592b65d.PNG)
+![azure-tf #center](https://github.com/hirnimeshrampuresoftware/arm-learning-paths/assets/71631645/9ff91592-9041-46fa-bf13-0281eea4d780)
 
 Also from the **Azure Dashboard**, go to **Virtual machines** and ensure that your virtual machine has been created from Terraform. 
 
