@@ -381,14 +381,14 @@ Also from the **Azure Dashboard**, go to **Virtual machines** and ensure that yo
 
 The **Resource group** name and **Public IP address** of this virtual machine should match your output above.
 
-![image #center](https://user-images.githubusercontent.com/67620689/227440425-fe5d1685-e957-46ec-b49c-e848d211fbe3.PNG)
+![2 #center](https://github.com/hirnimeshrampuresoftware/arm-learning-paths/assets/71631645/ac366e13-4b3f-4114-a986-19f5681cd717)
 
 ### Use private key to SSH into Azure VM
 Connect to your Azure VM with your preferred SSH client. You will be using the private key created through [ssh-keygen](/install-guides/ssh#ssh-keys), located at `~/.ssh/id_rsa`.
 
 Follow the connect instructions and commands mentioned in the Azure VM **Connect** section:
 
-![image #center](https://user-images.githubusercontent.com/67620689/227440429-f2b1249e-18eb-4db0-bce0-2eed07204fed.PNG)
+![3 #center](https://github.com/hirnimeshrampuresoftware/arm-learning-paths/assets/71631645/c377c010-fbe8-48fe-b535-149633a93df3)
 
 For example, if using the default username `azureuser`:
 
